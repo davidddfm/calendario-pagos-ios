@@ -1,0 +1,50 @@
+# §14.9: integración continua en cada pull request.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Xcode 26 o superior
+        run: |
+          xcodebuild -version
+          major=$(xcodebuild -version | awk 'NR==1 { split($2, v, "."); print v[1] }')
+          if [ "$major" -lt 26 ]; then echo "Se requiere Xcode 26+ (App Store Connect)"; exit 1; fi
+
+      - name: Formato
+        run: swift format lint --strict --recursive Packages/CalendarioKit calendariodepagos calendariodepagosUITests
+
+      - name: Patrones prohibidos
+        run: scripts/check-forbidden-patterns.sh
+
+      - name: Pruebas del paquete
+        working-directory: Packages/CalendarioKit
+        run: |
+          xcodebuild test -scheme CalendarioKit \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -enableCodeCoverage YES -resultBundlePath "$RUNNER_TEMP/kit.xcresult"
+
+      - name: Cobertura de Domain ≥ 90 %
+        run: |
+          coverage=$(xcrun xccov view --report --only-targets --json "$RUNNER_TEMP/kit.xcresult" \
+            | python3 -c 'import json,sys; print(next(t["lineCoverage"] for t in json.load(sys.stdin) if t["name"] == "Domain"))')
+          echo "Domain: $coverage"
+          python3 -c "import sys; sys.exit(0 if $coverage >= 0.90 else 1)"
+
+      - name: Pruebas de la app
+        run: |
+          xcodebuild test -project calendariodepagos.xcodeproj -scheme calendariodepagos \
+            -destination 'platform=iOS Simulator,name=iPhone 17'
+
+      - name: Compilación Release (advertencias como errores)
+        run: |
+          xcodebuild build -project calendariodepagos.xcodeproj -scheme calendariodepagos \
+            -configuration Release -destination 'generic/platform=iOS Simulator'

@@ -1,0 +1,611 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		817C5C9A3100000A006F1B8E /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5C993100000A006F1B8E /* Domain */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		817C5C5C30957895006F1B8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 817C5C4430957894006F1B8E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 817C5C4B30957894006F1B8E;
+			remoteInfo = calendariodepagos;
+		};
+		817C5C6630957895006F1B8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 817C5C4430957894006F1B8E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 817C5C4B30957894006F1B8E;
+			remoteInfo = calendariodepagos;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		817C5C4C30957894006F1B8E /* calendariodepagos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = calendariodepagos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		817C5C5B30957895006F1B8E /* calendariodepagosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = calendariodepagosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		817C5C6530957895006F1B8E /* calendariodepagosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = calendariodepagosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		817C5C793095797F006F1B8E /* Especificacion-funcional.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Especificacion-funcional.md"; sourceTree = "<group>"; };
+		817C5C7B3097CFB1006F1B8E /* investigacion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = investigacion.md; sourceTree = "<group>"; };
+		817C5C9B3100000A006F1B8E /* Arquitectura-tecnica.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Arquitectura-tecnica.md"; sourceTree = "<group>"; };
+		817C5C9C3100000A006F1B8E /* CalendarioKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CalendarioKit; path = Packages/CalendarioKit; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		817C5C4E30957894006F1B8E /* calendariodepagos */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = calendariodepagos;
+			sourceTree = "<group>";
+		};
+		817C5C5E30957895006F1B8E /* calendariodepagosTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = calendariodepagosTests;
+			sourceTree = "<group>";
+		};
+		817C5C6830957895006F1B8E /* calendariodepagosUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = calendariodepagosUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		817C5C4930957894006F1B8E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				817C5C9A3100000A006F1B8E /* Domain in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		817C5C5830957895006F1B8E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		817C5C6230957895006F1B8E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		817C5C4330957894006F1B8E = {
+			isa = PBXGroup;
+			children = (
+				817C5C793095797F006F1B8E /* Especificacion-funcional.md */,
+				817C5C9B3100000A006F1B8E /* Arquitectura-tecnica.md */,
+				817C5C7B3097CFB1006F1B8E /* investigacion.md */,
+				817C5C9C3100000A006F1B8E /* CalendarioKit */,
+				817C5C4E30957894006F1B8E /* calendariodepagos */,
+				817C5C5E30957895006F1B8E /* calendariodepagosTests */,
+				817C5C6830957895006F1B8E /* calendariodepagosUITests */,
+				817C5C4D30957894006F1B8E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		817C5C4D30957894006F1B8E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				817C5C4C30957894006F1B8E /* calendariodepagos.app */,
+				817C5C5B30957895006F1B8E /* calendariodepagosTests.xctest */,
+				817C5C6530957895006F1B8E /* calendariodepagosUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		817C5C4B30957894006F1B8E /* calendariodepagos */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 817C5C6F30957895006F1B8E /* Build configuration list for PBXNativeTarget "calendariodepagos" */;
+			buildPhases = (
+				817C5C4830957894006F1B8E /* Sources */,
+				817C5C4930957894006F1B8E /* Frameworks */,
+				817C5C4A30957894006F1B8E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				817C5C4E30957894006F1B8E /* calendariodepagos */,
+			);
+			name = calendariodepagos;
+			packageProductDependencies = (
+				817C5C993100000A006F1B8E /* Domain */,
+			);
+			productName = calendariodepagos;
+			productReference = 817C5C4C30957894006F1B8E /* calendariodepagos.app */;
+			productType = "com.apple.product-type.application";
+		};
+		817C5C5A30957895006F1B8E /* calendariodepagosTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 817C5C7230957895006F1B8E /* Build configuration list for PBXNativeTarget "calendariodepagosTests" */;
+			buildPhases = (
+				817C5C5730957895006F1B8E /* Sources */,
+				817C5C5830957895006F1B8E /* Frameworks */,
+				817C5C5930957895006F1B8E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				817C5C5D30957895006F1B8E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				817C5C5E30957895006F1B8E /* calendariodepagosTests */,
+			);
+			name = calendariodepagosTests;
+			packageProductDependencies = (
+			);
+			productName = calendariodepagosTests;
+			productReference = 817C5C5B30957895006F1B8E /* calendariodepagosTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		817C5C6430957895006F1B8E /* calendariodepagosUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 817C5C7530957895006F1B8E /* Build configuration list for PBXNativeTarget "calendariodepagosUITests" */;
+			buildPhases = (
+				817C5C6130957895006F1B8E /* Sources */,
+				817C5C6230957895006F1B8E /* Frameworks */,
+				817C5C6330957895006F1B8E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				817C5C6730957895006F1B8E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				817C5C6830957895006F1B8E /* calendariodepagosUITests */,
+			);
+			name = calendariodepagosUITests;
+			packageProductDependencies = (
+			);
+			productName = calendariodepagosUITests;
+			productReference = 817C5C6530957895006F1B8E /* calendariodepagosUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		817C5C4430957894006F1B8E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2650;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					817C5C4B30957894006F1B8E = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					817C5C5A30957895006F1B8E = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 817C5C4B30957894006F1B8E;
+					};
+					817C5C6430957895006F1B8E = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 817C5C4B30957894006F1B8E;
+					};
+				};
+			};
+			buildConfigurationList = 817C5C4730957894006F1B8E /* Build configuration list for PBXProject "calendariodepagos" */;
+			developmentRegion = es;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				es,
+				Base,
+			);
+			mainGroup = 817C5C4330957894006F1B8E;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				817C5C983100000A006F1B8E /* XCLocalSwiftPackageReference "Packages/CalendarioKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 817C5C4D30957894006F1B8E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				817C5C4B30957894006F1B8E /* calendariodepagos */,
+				817C5C5A30957895006F1B8E /* calendariodepagosTests */,
+				817C5C6430957895006F1B8E /* calendariodepagosUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		817C5C4A30957894006F1B8E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		817C5C5930957895006F1B8E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		817C5C6330957895006F1B8E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		817C5C4830957894006F1B8E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		817C5C5730957895006F1B8E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		817C5C6130957895006F1B8E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		817C5C5D30957895006F1B8E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 817C5C4B30957894006F1B8E /* calendariodepagos */;
+			targetProxy = 817C5C5C30957895006F1B8E /* PBXContainerItemProxy */;
+		};
+		817C5C6730957895006F1B8E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 817C5C4B30957894006F1B8E /* calendariodepagos */;
+			targetProxy = 817C5C6630957895006F1B8E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		817C5C6D30957895006F1B8E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		817C5C6E30957895006F1B8E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		817C5C7030957895006F1B8E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Calendario de Pagos";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidddfm.calendariodepagos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		817C5C7130957895006F1B8E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Calendario de Pagos";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidddfm.calendariodepagos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		817C5C7330957895006F1B8E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidddfm.calendariodepagosTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/calendariodepagos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/calendariodepagos";
+			};
+			name = Debug;
+		};
+		817C5C7430957895006F1B8E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidddfm.calendariodepagosTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/calendariodepagos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/calendariodepagos";
+			};
+			name = Release;
+		};
+		817C5C7630957895006F1B8E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidddfm.calendariodepagosUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = calendariodepagos;
+			};
+			name = Debug;
+		};
+		817C5C7730957895006F1B8E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidddfm.calendariodepagosUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = calendariodepagos;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		817C5C4730957894006F1B8E /* Build configuration list for PBXProject "calendariodepagos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				817C5C6D30957895006F1B8E /* Debug */,
+				817C5C6E30957895006F1B8E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		817C5C6F30957895006F1B8E /* Build configuration list for PBXNativeTarget "calendariodepagos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				817C5C7030957895006F1B8E /* Debug */,
+				817C5C7130957895006F1B8E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		817C5C7230957895006F1B8E /* Build configuration list for PBXNativeTarget "calendariodepagosTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				817C5C7330957895006F1B8E /* Debug */,
+				817C5C7430957895006F1B8E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		817C5C7530957895006F1B8E /* Build configuration list for PBXNativeTarget "calendariodepagosUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				817C5C7630957895006F1B8E /* Debug */,
+				817C5C7730957895006F1B8E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		817C5C983100000A006F1B8E /* XCLocalSwiftPackageReference "Packages/CalendarioKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/CalendarioKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		817C5C993100000A006F1B8E /* Domain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Domain;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 817C5C4430957894006F1B8E /* Project object */;
+}

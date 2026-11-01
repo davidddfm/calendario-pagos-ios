@@ -1,0 +1,22 @@
+{
+  "sourceLanguage" : "es",
+  "strings" : {
+    "Ahorros" : { "comment" : "Categoría de pago (CAT-03)" },
+    "Bienestar" : { "comment" : "Categoría de pago (CAT-03)" },
+    "Gastos" : { "comment" : "Categoría de pago (CAT-03)" },
+    "Inversiones" : { "comment" : "Categoría de pago (CAT-03)" },
+    "Préstamos" : { "comment" : "Categoría de pago (CAT-03)" },
+    "Servicios" : { "comment" : "Categoría de pago (CAT-03)" },
+    "Transportes" : { "comment" : "Categoría de pago (CAT-03)" },
+    "El monto máximo es 9,999,999.99." : { "comment" : "Error de validación del monto (PAG-01)" },
+    "El nombre admite hasta 60 caracteres." : { "comment" : "Error de validación del nombre (PAG-01)" },
+    "El pago no existía en ese mes." : { "comment" : "Error al marcar un pago" },
+    "El pago ya no existe." : { "comment" : "Error al marcar un pago" },
+    "El salario debe ser mayor que cero y hasta 9,999,999." : { "comment" : "Error de validación del salario (DAS-05)" },
+    "Elige un día del 1 al 31." : { "comment" : "Error de validación del día (PAG-01)" },
+    "Escribe un monto mayor que cero." : { "comment" : "Error de validación del monto (PAG-01)" },
+    "Escribe un nombre." : { "comment" : "Error de validación del nombre (PAG-01)" },
+    "No se pueden marcar pagos de meses futuros." : { "comment" : "Error al marcar un pago (MAR-02)" }
+  },
+  "version" : "1.0"
+}
