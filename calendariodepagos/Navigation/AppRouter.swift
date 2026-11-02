@@ -1,9 +1,20 @@
+import Domain
 import Features
 import Foundation
 import Observation
 
 enum AppTab: Hashable {
     case home, calendar, profile
+}
+
+/// Pantallas que se apilan dentro de una pestaña (§9.3). Las demás rutas llegan con sus pantallas.
+enum AppRoute: Hashable {
+    /// QUI-01
+    case fortnight(Fortnight)
+    /// HIS-01
+    case history
+    /// HIS-03
+    case historyMonth(YearMonth)
 }
 
 enum AppSheet: Identifiable {
@@ -26,9 +37,12 @@ enum AppSheet: Identifiable {
     }
 }
 
-/// Estado de navegación de la app (§9.3). Las rutas por pestaña se agregan con sus pantallas (iteración 2).
+/// Estado de navegación de la app (§9.3). Cada pestaña tiene su propia ruta, que se conserva al cambiar (NAV-02).
 @Observable
 final class AppRouter {
     var selectedTab: AppTab = .home
+    var homePath: [AppRoute] = []
+    var calendarPath: [AppRoute] = []
+    var profilePath: [AppRoute] = []
     var sheet: AppSheet?
 }

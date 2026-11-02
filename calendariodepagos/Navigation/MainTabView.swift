@@ -10,13 +10,16 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: $router.selectedTab) {
             Tab(value: AppTab.home) {
-                NavigationStack {
+                NavigationStack(path: $router.homePath) {
                     HomeView(
                         viewModel: container.makeHomeViewModel(),
                         onAddPayment: { router.sheet = .newPayment },
-                        onSelectPayment: { router.sheet = .editPayment($0) }
+                        onSelectPayment: { router.sheet = .editPayment($0) },
+                        onOpenFortnight: { router.homePath.append(.fortnight($0)) },
+                        onOpenHistory: { router.homePath.append(.history) }
                     )
                     .toolbar { addPaymentButton }
+                    .navigationDestination(for: AppRoute.self) { destination($0, path: $router.homePath) }
                 }
             } label: {
                 Label("Inicio", systemImage: "house")
@@ -24,20 +27,22 @@ struct MainTabView: View {
 
             // Calendario (iteración 4) y Perfil (iteración 3) todavía no tienen contenido propio.
             Tab(value: AppTab.calendar) {
-                NavigationStack {
+                NavigationStack(path: $router.calendarPath) {
                     ContentUnavailableView("Calendario", systemImage: "calendar")
                         .navigationTitle("Calendario")
                         .toolbar { addPaymentButton }
+                        .navigationDestination(for: AppRoute.self) { destination($0, path: $router.calendarPath) }
                 }
             } label: {
                 Label("Calendario", systemImage: "calendar")
             }
 
             Tab(value: AppTab.profile) {
-                NavigationStack {
+                NavigationStack(path: $router.profilePath) {
                     ContentUnavailableView("Perfil", systemImage: "person.crop.circle")
                         .navigationTitle("Perfil")
                         .toolbar { addPaymentButton }
+                        .navigationDestination(for: AppRoute.self) { destination($0, path: $router.profilePath) }
                 }
             } label: {
                 Label("Perfil", systemImage: "person.crop.circle")
@@ -47,6 +52,22 @@ struct MainTabView: View {
             NavigationStack {
                 PaymentFormView(viewModel: container.makePaymentFormViewModel(mode: sheet.formMode))
             }
+        }
+    }
+
+    @ViewBuilder
+    private func destination(_ route: AppRoute, path: Binding<[AppRoute]>) -> some View {
+        switch route {
+        case .fortnight(let fortnight):
+            FortnightDetailView(
+                viewModel: container.makeFortnightViewModel(fortnight: fortnight),
+                onSelectPayment: { router.sheet = .editPayment($0) })
+        case .history:
+            HistoryView(
+                viewModel: container.makeHistoryViewModel(),
+                onOpenMonth: { path.wrappedValue.append(.historyMonth($0)) })
+        case .historyMonth(let period):
+            HistoryMonthView(viewModel: container.makeHistoryMonthViewModel(period: period))
         }
     }
 

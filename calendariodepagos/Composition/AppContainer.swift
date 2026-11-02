@@ -72,8 +72,35 @@ extension AppContainer: ScreenFactory {
     func makeHomeViewModel() -> HomeViewModel {
         HomeViewModel(
             getSummary: GetHomeSummaryUseCase(payments: payments, records: records, clock: clock),
+            togglePaid: togglePaid,
             deletePayment: DeletePaymentUseCase(payments: payments, clock: clock, observer: sideEffects)
         )
+    }
+
+    func makeFortnightViewModel(fortnight: Fortnight) -> FortnightViewModel {
+        FortnightViewModel(
+            fortnight: fortnight,
+            getDetail: GetFortnightDetailUseCase(
+                payments: payments, records: records, settings: settings, clock: clock),
+            togglePaid: togglePaid
+        )
+    }
+
+    func makeHistoryViewModel() -> HistoryViewModel {
+        HistoryViewModel(getOverview: GetHistoryOverviewUseCase(payments: payments, records: records, clock: clock))
+    }
+
+    func makeHistoryMonthViewModel(period: YearMonth) -> HistoryMonthViewModel {
+        HistoryMonthViewModel(
+            period: period,
+            startDate: period.date(day: 1, calendar: clock.calendar),
+            getStatement: GetMonthStatementUseCase(payments: payments, records: records, clock: clock),
+            togglePaid: togglePaid
+        )
+    }
+
+    private var togglePaid: TogglePaymentPaidUseCase {
+        TogglePaymentPaidUseCase(payments: payments, records: records, clock: clock, observer: sideEffects)
     }
 
     func makePaymentFormViewModel(mode: PaymentFormViewModel.Mode) -> PaymentFormViewModel {

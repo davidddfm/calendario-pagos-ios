@@ -8,6 +8,7 @@ import Testing
 @Suite("PAG-04 / PAG-05 · Inicio")
 struct HomeViewModelTests {
     let payments: InMemoryPaymentRepository
+    let records = InMemoryPaymentRecordRepository()
     let clock: FixedClock
     let viewModel: HomeViewModel
 
@@ -20,8 +21,9 @@ struct HomeViewModelTests {
         ])
         clock = FixedClock(now: try Calendar.testGregorian.date(year: 2026, month: 10, day: 10))
         viewModel = HomeViewModel(
-            getSummary: GetHomeSummaryUseCase(
-                payments: payments, records: InMemoryPaymentRecordRepository(), clock: clock),
+            getSummary: GetHomeSummaryUseCase(payments: payments, records: records, clock: clock),
+            togglePaid: TogglePaymentPaidUseCase(
+                payments: payments, records: records, clock: clock, observer: SpyChangeObserver()),
             deletePayment: DeletePaymentUseCase(payments: payments, clock: clock, observer: SpyChangeObserver()))
     }
 
@@ -64,6 +66,17 @@ struct HomeViewModelTests {
         viewModel.confirmDeletion()
         #expect(viewModel.paymentPendingDeletion == nil)
         #expect(try payments.payment(id: item.id)?.deletedAt != nil)
+    }
+
+    @Test("MAR-01 · Marcar desde Inicio actualiza el estado en pantalla")
+    func togglePaid() throws {
+        viewModel.load()
+        let item = try #require(viewModel.state.value?.todayItems.first)
+        viewModel.togglePaid(item)
+        #expect(viewModel.state.value?.todayItems.first?.isPaid == true)
+        #expect(records.stored.count == 1)
+        viewModel.togglePaid(try #require(viewModel.state.value?.todayItems.first))
+        #expect(viewModel.state.value?.todayItems.first?.isPaid == false)
     }
 
     @Test("Confirmar sin una eliminación pendiente no hace nada")

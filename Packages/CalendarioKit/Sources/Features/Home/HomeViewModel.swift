@@ -11,10 +11,16 @@ public final class HomeViewModel {
     public private(set) var actionError: UserFacingError?
 
     private let getSummary: GetHomeSummaryUseCase
+    private let togglePaid: TogglePaymentPaidUseCase
     private let deletePayment: DeletePaymentUseCase
 
-    public init(getSummary: GetHomeSummaryUseCase, deletePayment: DeletePaymentUseCase) {
+    public init(
+        getSummary: GetHomeSummaryUseCase,
+        togglePaid: TogglePaymentPaidUseCase,
+        deletePayment: DeletePaymentUseCase
+    ) {
         self.getSummary = getSummary
+        self.togglePaid = togglePaid
         self.deletePayment = deletePayment
     }
 
@@ -31,6 +37,16 @@ public final class HomeViewModel {
             state = .loaded(try getSummary.execute())
         } catch {
             state = .failed(UserFacingError(error))
+        }
+    }
+
+    /// MAR-01: Inicio siempre muestra el mes actual.
+    public func togglePaid(_ item: MonthStatement.Item) {
+        do {
+            try togglePaid.execute(paymentID: item.id)
+            load()
+        } catch {
+            actionError = UserFacingError(error)
         }
     }
 

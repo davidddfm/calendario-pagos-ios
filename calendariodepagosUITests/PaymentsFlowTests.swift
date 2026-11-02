@@ -70,6 +70,43 @@ final class PaymentsFlowTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Teléfono"].exists)
     }
 
+    /// MAR-01, PAG-06, QUI-01, NAV-02, HIS-01, HIS-03.
+    @MainActor
+    func testMarkPaidFortnightAndHistory() throws {
+        completeOnboarding()
+        app.buttons["Crear mi primer pago"].tap()
+        fillPayment(name: "Luz", amount: "80")
+
+        // MAR-01: marcar desde Inicio.
+        let checkbox = app.buttons["paid.Luz"].firstMatch
+        XCTAssertTrue(checkbox.waitForExistence(timeout: 5))
+        XCTAssertEqual(checkbox.value as? String, "Pendiente")
+        checkbox.tap()
+        XCTAssertTrue(
+            app.buttons.matching(NSPredicate(format: "identifier == 'paid.Luz' AND value == 'Pagado'")).firstMatch
+                .waitForExistence(timeout: 5))
+
+        // PAG-06 / QUI-01: abrir la quincena del pago.
+        let day = Calendar.current.component(.day, from: .now)
+        app.staticTexts[day <= 15 ? "Primera quincena" : "Segunda quincena"].tap()
+        XCTAssertTrue(app.staticTexts["Total de pagos"].waitForExistence(timeout: 5))
+
+        // NAV-02: cambiar de pestaña conserva la ruta.
+        app.tabBars.buttons["Calendario"].tap()
+        app.tabBars.buttons["Inicio"].tap()
+        XCTAssertTrue(app.staticTexts["Total de pagos"].waitForExistence(timeout: 5))
+        app.navigationBars.buttons.firstMatch.tap()
+
+        // HIS-01 / HIS-03: historial desde el menú secundario.
+        app.buttons["home.menu"].tap()
+        app.buttons["Historial de pagos"].tap()
+        XCTAssertTrue(app.staticTexts["Total pagado, últimos 6 meses"].waitForExistence(timeout: 5))
+        app.staticTexts.matching(NSPredicate(format: "label CONTAINS '1 de 1 pagos'")).firstMatch.tap()
+        XCTAssertTrue(app.staticTexts["Pagados"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Todo pagado."].exists)
+        attachScreenshot("Mes del historial")
+    }
+
     // MARK: - Ayudas
 
     private func completeOnboarding() {

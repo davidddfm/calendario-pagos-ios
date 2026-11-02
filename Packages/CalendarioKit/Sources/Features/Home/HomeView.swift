@@ -8,20 +8,47 @@ public struct HomeView: View {
     @Environment(DataChangeTracker.self) private var changes
     private let onAddPayment: () -> Void
     private let onSelectPayment: (UUID) -> Void
+    private let onOpenFortnight: (Fortnight) -> Void
+    private let onOpenHistory: () -> Void
 
     public init(
         viewModel: HomeViewModel,
         onAddPayment: @escaping () -> Void,
-        onSelectPayment: @escaping (UUID) -> Void
+        onSelectPayment: @escaping (UUID) -> Void,
+        onOpenFortnight: @escaping (Fortnight) -> Void,
+        onOpenHistory: @escaping () -> Void
     ) {
         _viewModel = State(initialValue: viewModel)
         self.onAddPayment = onAddPayment
         self.onSelectPayment = onSelectPayment
+        self.onOpenFortnight = onOpenFortnight
+        self.onOpenHistory = onOpenHistory
     }
 
     public var body: some View {
         content
             .navigationTitle(Text("Inicio", bundle: .module))
+            .toolbar {
+                // Menú secundario (§1). Configuración y Acerca de se agregan con sus pantallas.
+                ToolbarItem(placement: .topBarLeading) {
+                    Menu {
+                        Button(action: onOpenHistory) {
+                            Label {
+                                Text("Historial de pagos", bundle: .module)
+                            } icon: {
+                                Image(systemName: "clock.arrow.circlepath")
+                            }
+                        }
+                    } label: {
+                        Label {
+                            Text("Más opciones", bundle: .module)
+                        } icon: {
+                            Image(systemName: "ellipsis")
+                        }
+                    }
+                    .accessibilityIdentifier("home.menu")
+                }
+            }
             .task(id: changes.version) { viewModel.load() }
             .confirmationDialog(
                 Text("¿Eliminar este pago?", bundle: .module),
@@ -41,15 +68,7 @@ public struct HomeView: View {
                     "“\(item.name)” dejará de aparecer desde este mes. Los meses anteriores conservan su registro.",
                     bundle: .module)
             }
-            .alert(
-                Text("No se pudo eliminar", bundle: .module),
-                isPresented: Binding(
-                    get: { viewModel.actionError != nil }, set: { if !$0 { viewModel.dismissActionError() } }),
-                presenting: viewModel.actionError
-            ) { _ in
-            } message: { error in
-                Text(verbatim: error.message)
-            }
+            .actionErrorAlert(error: viewModel.actionError, dismiss: viewModel.dismissActionError)
     }
 
     @ViewBuilder
@@ -58,21 +77,7 @@ public struct HomeView: View {
         case .idle, .loading:
             ProgressView()
         case .failed(let error):
-            ContentUnavailableView {
-                Label {
-                    Text("No se pudieron cargar tus pagos", bundle: .module)
-                } icon: {
-                    Image(systemName: "exclamationmark.triangle")
-                }
-            } description: {
-                Text(verbatim: error.message)
-            } actions: {
-                Button {
-                    viewModel.load()
-                } label: {
-                    Text("Reintentar", bundle: .module)
-                }
-            }
+            LoadFailedView(error: error, retry: viewModel.load)
         case .loaded(let summary) where summary.isEmpty:
             welcome
         case .loaded(let summary):
@@ -149,17 +154,28 @@ public struct HomeView: View {
     private func fortnightSection(_ summary: HomeSummary) -> some View {
         Section {
             ForEach(summary.fortnights) { total in
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(total.fortnight.title)
-                        Text(total.fortnight.daysDescription)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                // PAG-06: tocar una quincena abre su detalle.
+                Button {
+                    onOpenFortnight(total.fortnight)
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(total.fortnight.title)
+                            Text(total.fortnight.daysDescription)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        MoneyText(total.total)
+                        Image(systemName: "chevron.right")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(.tertiary)
+                            .accessibilityHidden(true)
                     }
-                    Spacer()
-                    MoneyText(total.total)
+                    .contentShape(Rectangle())
+                    .accessibilityElement(children: .combine)
                 }
-                .accessibilityElement(children: .combine)
+                .buttonStyle(.plain)
             }
         } header: {
             Text("Análisis quincenal", bundle: .module)
@@ -167,12 +183,11 @@ public struct HomeView: View {
     }
 
     private func row(_ item: MonthStatement.Item) -> some View {
-        Button {
-            onSelectPayment(item.id)
-        } label: {
-            PaymentRow(item: item)
-        }
-        .foregroundStyle(.primary)
+        PaymentRow(
+            item: item,
+            onTogglePaid: { viewModel.togglePaid(item) },
+            onSelect: { onSelectPayment(item.id) }
+        )
         .swipeActions {
             Button(role: .destructive) {
                 viewModel.requestDeletion(of: item)
@@ -199,27 +214,6 @@ private struct HomeRow: Identifiable {
 
     static func rows(_ items: [MonthStatement.Item], in section: Section) -> [HomeRow] {
         items.map { HomeRow(section: section, item: $0) }
-    }
-}
-
-struct PaymentRow: View {
-    let item: MonthStatement.Item
-
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(verbatim: item.name)
-                CategoryBadge(item.category)
-            }
-            Spacer()
-            VStack(alignment: .trailing, spacing: 4) {
-                MoneyText(item.displayAmount)
-                Text("Día \(item.effectiveDay)", bundle: .module)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .accessibilityElement(children: .combine)
     }
 }
 
