@@ -1,0 +1,126 @@
+{
+  "sourceLanguage" : "es",
+  "strings" : {
+    "¿Eliminar este pago?" : {
+
+    },
+    "“%@” dejará de aparecer desde este mes. Los meses anteriores conservan su registro." : {
+
+    },
+    "Algo salió mal. Inténtalo de nuevo." : {
+
+    },
+    "Análisis quincenal" : {
+
+    },
+    "Buscar pagos" : {
+
+    },
+    "Cancelar" : {
+
+    },
+    "Categoría" : {
+
+    },
+    "Continuar" : {
+
+    },
+    "Crear mi primer pago" : {
+
+    },
+    "Dejará de aparecer desde este mes. Los meses anteriores conservan su registro." : {
+
+    },
+    "Día %lld" : {
+
+    },
+    "Día del mes" : {
+
+    },
+    "Días 1 al 15" : {
+
+    },
+    "Días 16 al 31" : {
+
+    },
+    "Dólar estadounidense ($)" : {
+
+    },
+    "Editar pago" : {
+
+    },
+    "Elige tu moneda" : {
+
+    },
+    "Eliminar" : {
+
+    },
+    "Eliminar pago" : {
+
+    },
+    "En los meses sin este día, el pago se muestra el último día del mes." : {
+
+    },
+    "Euro (€)" : {
+
+    },
+    "Guardar" : {
+
+    },
+    "Inicio" : {
+
+    },
+    "Moneda" : {
+
+    },
+    "Monto" : {
+
+    },
+    "No se pudieron cargar tus pagos" : {
+
+    },
+    "No se pudo eliminar" : {
+
+    },
+    "No se pudo guardar" : {
+
+    },
+    "No tienes pagos para hoy." : {
+
+    },
+    "Nombre" : {
+
+    },
+    "Nuevo pago" : {
+
+    },
+    "Para hoy" : {
+
+    },
+    "Primera quincena" : {
+
+    },
+    "Registra una sola vez tus pagos mensuales: la app los repite cada mes en el mismo día y te ayuda a ver cuánto te queda." : {
+
+    },
+    "Reintentar" : {
+
+    },
+    "Resultados" : {
+
+    },
+    "Segunda quincena" : {
+
+    },
+    "Te damos la bienvenida" : {
+
+    },
+    "Todos los montos de la app se mostrarán en esta moneda. La app trabaja con una sola moneda y no hace conversiones." : {
+
+    },
+    "Todos los pagos" : {
+
+    }
+  },
+  "version" : "1.0"
+}

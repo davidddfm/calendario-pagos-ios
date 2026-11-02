@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		817C5C9A3100000A006F1B8E /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5C993100000A006F1B8E /* Domain */; };
+		817C5CA13100000C006F1B8E /* Persistence in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5CA13100000B006F1B8E /* Persistence */; };
+		817C5CA23100000C006F1B8E /* SystemServices in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5CA23100000B006F1B8E /* SystemServices */; };
+		817C5CA33100000C006F1B8E /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5CA33100000B006F1B8E /* DesignSystem */; };
+		817C5CA43100000C006F1B8E /* Features in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5CA43100000B006F1B8E /* Features */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +65,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				817C5C9A3100000A006F1B8E /* Domain in Frameworks */,
+				817C5CA13100000C006F1B8E /* Persistence in Frameworks */,
+				817C5CA23100000C006F1B8E /* SystemServices in Frameworks */,
+				817C5CA33100000C006F1B8E /* DesignSystem in Frameworks */,
+				817C5CA43100000C006F1B8E /* Features in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +134,10 @@
 			name = calendariodepagos;
 			packageProductDependencies = (
 				817C5C993100000A006F1B8E /* Domain */,
+				817C5CA13100000B006F1B8E /* Persistence */,
+				817C5CA23100000B006F1B8E /* SystemServices */,
+				817C5CA33100000B006F1B8E /* DesignSystem */,
+				817C5CA43100000B006F1B8E /* Features */,
 			);
 			productName = calendariodepagos;
 			productReference = 817C5C4C30957894006F1B8E /* calendariodepagos.app */;
@@ -411,6 +423,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = calendariodepagos/calendariodepagos.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
@@ -444,6 +457,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = calendariodepagos/calendariodepagos.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
@@ -604,6 +618,22 @@
 		817C5C993100000A006F1B8E /* Domain */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Domain;
+		};
+		817C5CA13100000B006F1B8E /* Persistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Persistence;
+		};
+		817C5CA23100000B006F1B8E /* SystemServices */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SystemServices;
+		};
+		817C5CA33100000B006F1B8E /* DesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DesignSystem;
+		};
+		817C5CA43100000B006F1B8E /* Features */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Features;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

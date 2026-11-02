@@ -1,0 +1,24 @@
+{
+  "sourceLanguage" : "es",
+  "strings" : {
+    "Calendario" : {
+
+    },
+    "Inicio" : {
+
+    },
+    "No se pudieron abrir tus datos" : {
+
+    },
+    "Nuevo pago" : {
+
+    },
+    "Perfil" : {
+
+    },
+    "Reintentar" : {
+
+    }
+  },
+  "version" : "1.0"
+}

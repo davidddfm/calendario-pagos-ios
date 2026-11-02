@@ -21,6 +21,9 @@ public struct AppSettings: Equatable, Sendable {
         self.appLock = appLock
         self.hasCompletedOnboarding = hasCompletedOnboarding
     }
+
+    /// MND-01: sin moneda elegida se muestra el onboarding, aunque la bandera diga lo contrario (datos dañados).
+    public var needsOnboarding: Bool { !hasCompletedOnboarding || currency == nil }
 }
 
 // MARK: - Codable

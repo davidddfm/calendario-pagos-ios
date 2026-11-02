@@ -1,0 +1,10 @@
+{
+  "sourceLanguage" : "es",
+  "strings" : {
+    "No se pudieron abrir tus datos." : { "comment" : "Error al abrir el almacén" },
+    "No se pudieron leer tus pagos." : { "comment" : "Error de lectura" },
+    "No se pudo guardar el cambio. Inténtalo de nuevo." : { "comment" : "Error al guardar" },
+    "Sin nombre" : { "comment" : "Nombre de un pago guardado sin nombre (§7.5)" }
+  },
+  "version" : "1.0"
+}

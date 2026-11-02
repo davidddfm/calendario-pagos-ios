@@ -7,6 +7,8 @@ public enum DomainError: Error, Equatable, Sendable {
     case paymentNotFound
     /// El pago no existía en el mes indicado (creado después o eliminado antes).
     case paymentNotInPeriod
+    /// PAG-01: los casos de uso vuelven a validar antes de persistir (defensa en profundidad, §5.4).
+    case invalidPayment([PaymentValidationError])
 }
 
 extension DomainError: LocalizedError {
@@ -15,6 +17,8 @@ extension DomainError: LocalizedError {
         case .futurePeriod: String(localized: "No se pueden marcar pagos de meses futuros.", bundle: .module)
         case .paymentNotFound: String(localized: "El pago ya no existe.", bundle: .module)
         case .paymentNotInPeriod: String(localized: "El pago no existía en ese mes.", bundle: .module)
+        case .invalidPayment(let errors):
+            errors.first?.errorDescription ?? String(localized: "Revisa los datos del pago.", bundle: .module)
         }
     }
 }

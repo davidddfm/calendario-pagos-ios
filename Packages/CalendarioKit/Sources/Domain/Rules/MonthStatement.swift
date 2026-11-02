@@ -56,6 +56,9 @@ public struct MonthStatement: Sendable {
         }
 
         public var isPaid: Bool { record != nil }
+
+        /// `false` para un pago eliminado cuyo registro sigue en el mes: solo existe en el Historial.
+        public var paymentExists: Bool { currentAmount != nil }
         public var fortnight: Fortnight { Fortnight(dayOfMonth: scheduledDay) }
 
         /// Pagado: monto registrado. Pendiente: monto actual.

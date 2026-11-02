@@ -20,7 +20,7 @@ jobs:
           if [ "$major" -lt 26 ]; then echo "Se requiere Xcode 26+ (App Store Connect)"; exit 1; fi
 
       - name: Formato
-        run: swift format lint --strict --recursive Packages/CalendarioKit calendariodepagos calendariodepagosUITests
+        run: swift format lint --strict --recursive Packages/CalendarioKit calendariodepagos calendariodepagosTests calendariodepagosUITests
 
       - name: Patrones prohibidos
         run: scripts/check-forbidden-patterns.sh
@@ -28,7 +28,7 @@ jobs:
       - name: Pruebas del paquete
         working-directory: Packages/CalendarioKit
         run: |
-          xcodebuild test -scheme CalendarioKit \
+          xcodebuild test -scheme CalendarioKit-Package \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
             -enableCodeCoverage YES -resultBundlePath "$RUNNER_TEMP/kit.xcresult"
 
