@@ -10,26 +10,32 @@ public struct HomeView: View {
     private let onSelectPayment: (UUID) -> Void
     private let onOpenFortnight: (Fortnight) -> Void
     private let onOpenHistory: () -> Void
+    private let onOpenSettings: () -> Void
+    private let exportFile: PaymentsCSVFile
 
     public init(
         viewModel: HomeViewModel,
         onAddPayment: @escaping () -> Void,
         onSelectPayment: @escaping (UUID) -> Void,
         onOpenFortnight: @escaping (Fortnight) -> Void,
-        onOpenHistory: @escaping () -> Void
+        onOpenHistory: @escaping () -> Void,
+        onOpenSettings: @escaping () -> Void,
+        exportFile: PaymentsCSVFile
     ) {
         _viewModel = State(initialValue: viewModel)
         self.onAddPayment = onAddPayment
         self.onSelectPayment = onSelectPayment
         self.onOpenFortnight = onOpenFortnight
         self.onOpenHistory = onOpenHistory
+        self.onOpenSettings = onOpenSettings
+        self.exportFile = exportFile
     }
 
     public var body: some View {
         content
             .navigationTitle(Text("Inicio", bundle: .module))
             .toolbar {
-                // Menú secundario (§1). Configuración y Acerca de se agregan con sus pantallas.
+                // Menú secundario (§1) con Exportar CSV (HER-10). Acerca de llega con su pantalla.
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
                         Button(action: onOpenHistory) {
@@ -39,6 +45,14 @@ public struct HomeView: View {
                                 Image(systemName: "clock.arrow.circlepath")
                             }
                         }
+                        Button(action: onOpenSettings) {
+                            Label {
+                                Text("Configuración", bundle: .module)
+                            } icon: {
+                                Image(systemName: "gearshape")
+                            }
+                        }
+                        ExportCSVLink(file: exportFile)
                     } label: {
                         Label {
                             Text("Más opciones", bundle: .module)

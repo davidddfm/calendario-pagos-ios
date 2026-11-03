@@ -1437,7 +1437,7 @@ No hay proceso de cierre. Al detectarse un día nuevo (`significantTimeChangeNot
 
 ## 13. Matriz de trazabilidad
 
-Estado de implementación al 2026-11-01 (fin de la iteración 2): ✅ implementada y probada · 🟡 parcial (la regla de dominio está lista y probada; falta la pantalla o la integración indicada) · ⬜ pendiente.
+Estado de implementación al 2026-11-02 (fin de la iteración 3): ✅ implementada y probada · 🟡 parcial (la regla de dominio está lista y probada; falta la pantalla o la integración indicada) · ⬜ pendiente.
 
 | Regla | Componente principal | Caso de uso / regla de dominio | Prueba | Estado |
 | --- | --- | --- | --- | --- |
@@ -1460,33 +1460,33 @@ Estado de implementación al 2026-11-01 (fin de la iteración 2): ✅ implementa
 | HIS-02 | `Chart` + `BarMark` | Últimos 6 meses | Unit | ✅ |
 | HIS-03 | `HistoryMonthView` | `MonthStatement.paid/pending` | Unit | ✅ |
 | HIS-04 | `HistoryMonthView` | `TogglePaymentPaidUseCase(period:)` | Unit (incl. pagos eliminados) | ✅ |
-| DAS-01 | `ProgressBar` | `DashboardCalculator.level` | Unit: 50 % verde, 50.01 % naranja | 🟡 Cálculo probado; falta vista |
-| DAS-02 | Tarjeta disponible | `isOverdrawn` | Unit | 🟡 Cálculo probado; falta vista |
-| DAS-03 | `SectorMark` | `categoryShares` (> 0) | Unit | 🟡 Cálculo probado; falta vista |
-| DAS-04 | `SalaryRequiredCard` | `availability == nil` | Unit + UI | 🟡 `availability == nil` probado; falta vista |
-| DAS-05 | Campo de salario | `SalaryValidator` | Unit: 9,999,999 válido; 9,999,999.01 inválido | 🟡 `SalaryValidator` probado; falta campo en Ajustes |
-| DAS-06 | Botón "Ver historial" | `AppRoute.history` | UI | ⬜ |
+| DAS-01 | `ProgressBar` | `DashboardCalculator.level` | Unit: 50 % verde, 50.01 % naranja | ✅ `ProgressBar` con color y texto ("62% del salario en pagos") |
+| DAS-02 | Tarjeta disponible | `isOverdrawn` | Unit | ✅ Monto en rojo y aviso "Tus pagos superan tu salario" |
+| DAS-03 | `SectorMark` | `categoryShares` (> 0) | Unit | ✅ `SectorMark` y lista con porcentaje por categoría |
+| DAS-04 | `SalaryRequiredCard` | `availability == nil` | Unit + UI | ✅ `SalaryRequiredCard` con "Ir a Ajustes"; UI: `FinanceFlowTests.testSalaryFromDashboard` |
+| DAS-05 | Campo de salario | `SalaryValidator` | Unit: 9,999,999 válido; 9,999,999.01 inválido | ✅ Unit: `SettingsViewModelTests.salaryLimit` y `SettingsUseCaseTests` |
+| DAS-06 | Botón "Ver historial" | `AppRoute.history` | UI | ✅ UI: `testSalaryFromDashboard` |
 | CAL-01 | `CalendarView` | `GetCalendarMonthUseCase` | Unit | ⬜ |
 | CAL-02 | Botones de mes | `YearMonth.adding(months:)` | Unit: dic → ene, ene → dic | 🟡 `YearMonth.adding(months:)` probado; falta vista |
 | CAL-03 | `DayDetailView` | `GetDayDetailUseCase` | Unit | ⬜ |
 | CAL-04 | `DayDetailView` | `DayDetail.isEditable`, progreso | Unit | ⬜ |
 | CAL-05 | `DayDetailView` | `isEditable == false` | Unit | ⬜ |
 | CAL-06 | Fila del día | `AppSheet.editPayment` | UI | ⬜ |
-| CAL-07 | `Menu` Herramientas | — | UI | ⬜ |
+| CAL-07 | `Menu` Herramientas | — | UI | 🟡 Menú Herramientas en la barra del Calendario (UI: `testToolsFromCalendar`); falta la vista mensual (iteración 4) |
 | QUI-01 | `FortnightDetailView` | `GetFortnightDetailUseCase` | Unit | ✅ |
 | QUI-02 | Tarjeta de saldo | `salary.percent(50) − total` | Unit | ✅ |
 | QUI-03 | `PaidCheckbox` | MAR-02 | Unit | ✅ |
-| QUI-04 | `SalaryRequiredCard` | `remaining == nil` | Unit | ✅ `SalaryRequiredCard`; el acceso directo a Ajustes llega con Ajustes (iteración 3) |
-| HER-01 | `AffordabilityView` | `ExpenseKind` | UI | 🟡 `ExpenseKind` listo; falta vista |
-| HER-02 | `AffordabilityView` | `AffordabilityCalculator` | Unit | 🟡 Cálculo probado; falta vista |
-| HER-03 | `TrafficLightView` | Umbrales 15 % / 10 % | Unit: 15 %, 14.99 %, 10 %, 9.99 %, gasto > salario | 🟡 Umbrales probados; falta `TrafficLightView` |
-| HER-04 | `LeakDetectorView` | `LeakDetector` | Unit: orden y × 12 | 🟡 Cálculo probado; falta vista |
-| HER-05 | Pie de lista | `LeakReport.annualTotal` | Unit | 🟡 Cálculo probado; falta vista |
-| HER-06 | — | Todos los pagos como mensuales | Unit | 🟡 Cálculo probado; falta vista |
-| HER-07 | `BudgetPlanView` | `BudgetPlanCalculator` | Unit: suma = salario | 🟡 Cálculo probado; falta vista |
-| HER-08 | — | `CSVPaymentExporter` | Unit: nombre, BOM, escapado | ⬜ |
-| HER-09 | `ShareLink` | `PaymentsCSVFile: Transferable` | Manual (hoja de compartir) | ⬜ |
-| HER-10 | Menús de Inicio y Calendario | `ExportPaymentsUseCase` | UI | ⬜ |
+| QUI-04 | `SalaryRequiredCard` | `remaining == nil` | Unit | ✅ `SalaryRequiredCard` con acceso directo a Ajustes |
+| HER-01 | `AffordabilityView` | `ExpenseKind` | UI | ✅ Campo de monto y `Picker` Necesidad/Deseo; UI: `testToolsFromCalendar` |
+| HER-02 | `AffordabilityView` | `AffordabilityCalculator` | Unit | ✅ `EvaluateAffordabilityUseCase`; distribución frente a 50/30/20 |
+| HER-03 | `TrafficLightView` | Umbrales 15 % / 10 % | Unit: 15 %, 14.99 %, 10 %, 9.99 %, gasto > salario | ✅ `TrafficLightView` con color, icono y texto |
+| HER-04 | `LeakDetectorView` | `LeakDetector` | Unit: orden y × 12 | ✅ `LeakDetectorView`; UI: costo anual |
+| HER-05 | Pie de lista | `LeakReport.annualTotal` | Unit | ✅ Total anual al pie |
+| HER-06 | — | Todos los pagos como mensuales | Unit | ✅ |
+| HER-07 | `BudgetPlanView` | `BudgetPlanCalculator` | Unit: suma = salario | ✅ `BudgetPlanView`; sin salario, invitación (S-05) |
+| HER-08 | — | `CSVPaymentExporter` | Unit: nombre, BOM, escapado | ✅ `CSVPaymentExporter` en `SystemServices`; Unit: nombre con zona local, BOM, CRLF, escapado y fórmulas |
+| HER-09 | `ShareLink` | `PaymentsCSVFile: Transferable` | Manual (hoja de compartir) | 🟡 `ShareLink` con `PaymentsCSVFile` (genera el archivo al compartir); falta la prueba manual de la hoja de compartir |
+| HER-10 | Menús de Inicio y Calendario | `ExportPaymentsUseCase` | UI | ✅ Menú de Inicio y menú Herramientas del Calendario |
 | NOT-01 | — | `ReminderSettings()` | Unit: valores por defecto | 🟡 Valores por defecto probados; falta programar avisos |
 | NOT-02 | `SettingsView` | `UpdateReminderSettingsUseCase` → reprogramación | Unit con `ReminderScheduling` simulado | ⬜ |
 | NOT-03 | — | `ReminderPlanner` (días vacíos, 1 por día) | Unit | 🟡 `ReminderPlanner` probado; falta el programador del sistema |
@@ -1496,14 +1496,14 @@ Estado de implementación al 2026-11-01 (fin de la iteración 2): ✅ implementa
 | NOT-07 | — | `ReminderText.body` (sin montos) | Unit | 🟡 El plan solo lleva nombres; falta `ReminderText.body` |
 | NOT-08 | — | `ReminderPlanner` omite el día si todo está pagado | Unit | 🟡 `ReminderPlanner` probado; falta el programador del sistema |
 | NOT-09 | `NotificationDelegate` | `DeepLink.today` | Unit del router + Manual | ⬜ |
-| CFG-01 | `SettingsView` | `UpdateSalaryUseCase` | Unit | 🟡 `SalaryValidator` probado; falta `UpdateSalaryUseCase` y Ajustes |
+| CFG-01 | `SettingsView` | `UpdateSalaryUseCase` | Unit | ✅ `SettingsView` + `UpdateSalaryUseCase`, con "Quitar salario" |
 | MND-01 | `OnboardingView` | `CompleteOnboardingUseCase` | UI: primer arranque | ✅ |
 | MND-02 | `MoneyText` | `MoneyFormatter` | Unit: es_MX/USD → "$", es_ES/EUR → "€" | 🟡 `MoneyText` en uso y verificado por UI; falta la prueba unitaria por región |
-| MND-03 | Alerta de confirmación | `ChangeCurrencyUseCase` (no convierte) | Unit | ⬜ |
-| MND-04 | — | Columna `Moneda` del CSV | Unit | ⬜ |
+| MND-03 | Alerta de confirmación | `ChangeCurrencyUseCase` (no convierte) | Unit | ✅ Alerta antes de cambiar; Unit + UI: `testChangeCurrency` |
+| MND-04 | — | Columna `Moneda` del CSV | Unit | ✅ Columna `Moneda` (Unit del exportador y del caso de uso) |
 | CAT-01 | Sin UI de gestión | `PaymentCategory` (enum cerrado) | Revisión de código | ✅ |
 | CAT-02 | `Picker` | `PaymentCategory.allCases`, `.default` | Unit | ✅ |
-| CAT-03 | `CategoryBadge`, CSV | `localizedName` | Unit | ✅ Formulario e Inicio; el CSV llega en la iteración 3 |
+| CAT-03 | `CategoryBadge`, CSV | `localizedName` | Unit | ✅ Formulario, Inicio, Dashboard, Fugas y CSV |
 | SEG-01 | Interruptor | `UpdateAppLockSettingsUseCase`, `AppLockSettings()` | Unit | 🟡 `AppLockSettings()` probado; falta interruptor y bloqueo |
 | SEG-02 | `Picker` | `LockGracePeriod`, `AppLockController` | Unit con `FixedClock` | 🟡 `LockGracePeriod` listo; falta `AppLockController` |
 | SEG-03 | `RootView` → `AppLockView` | `isLocked` | UI | ⬜ |
@@ -1890,13 +1890,13 @@ La especificación no fija estos detalles; se adopta el criterio indicado hasta 
 | 0. Fundaciones | Ajustes de proyecto, Git, CI con controles de cumplimiento, paquete `CalendarioKit`, `Domain` (valores y reglas) con pruebas, *spike* de avisos desde el widget, `PrivacyInfo.xcprivacy` desde el primer día | PAG-03, PAG-07, CAT | ✅ Completada, salvo el *spike* del widget (R-02), que pasa a la iteración 6 porque necesita el target del widget |
 | 1. Pagos | Persistencia, onboarding de moneda, Inicio, formulario, búsqueda, borrado | NAV, PAG, MND-01, MND-02 | ✅ Completada (NAV-02 y PAG-06 se cerraron en la iteración 2) |
 | 2. Estado mensual | Marcar, quincenas, historial | MAR, QUI, HIS | ✅ Completada, más NAV-02 y PAG-06. Las casillas del Detalle del día y del widget llegan en las iteraciones 4 y 6 |
-| 3. Finanzas | Ajustes de salario, Dashboard, herramientas, exportación | CFG, DAS, HER, MND-03, MND-04 | ⬜ Pendiente (cálculos de dominio ya listos) |
+| 3. Finanzas | Ajustes de salario, Dashboard, herramientas, exportación | CFG, DAS, HER, MND-03, MND-04 | ✅ Completada. Falta la prueba manual de la hoja de compartir (HER-09); el menú Herramientas ya vive en la barra del Calendario, cuya vista mensual llega en la iteración 4 |
 | 4. Calendario | Vista mensual, detalle del día | CAL | ⬜ Pendiente |
 | 5. Sistema | Recordatorios, bloqueo, apariencia | NOT, SEG, APA | ⬜ Pendiente (`ReminderPlanner` ya listo) |
 | 6. Widget | Familias, línea de tiempo, intención interactiva | WID | ⬜ Pendiente |
 | 7. Publicación | Accesibilidad, rendimiento, política de privacidad y soporte publicados, ficha, notas para App Review y lista de verificación de [§17.3](#173-lista-de-verificación-previa-al-envío) en TestFlight | NEG, §14.6, §14.7, §17 | ⬜ Pendiente |
 
-Notas de implementación (iteraciones 0 a 2):
+Notas de implementación (iteraciones 0 a 3):
 
 - `Package.swift` incorpora cada módulo en la iteración que lo usa; con varios productos, el esquema de pruebas del paquete es `CalendarioKit-Package`. El target `TestSupport` (reloj fijo, repositorios en memoria, datos de ejemplo) solo lo usan las pruebas.
 - `MonthStatement.Item` añade `scheduledDay` (para calcular la quincena de un pago eliminado después de pagarlo) y `paymentExists` (Inicio oculta los pagos eliminados que solo siguen en el Historial).
@@ -1904,6 +1904,10 @@ Notas de implementación (iteraciones 0 a 2):
 - Las pantallas con lista cargan dentro de una única `List` y muestran carga, error y vacío como capa (`LoadStateOverlay`): cambiar de `ProgressView` a `List` tras la carga dejaba el contenido debajo del título grande.
 - En la fila de pago, si el monto cambió después de marcarlo (MAR-05), el monto principal es el actual y debajo se lee "Pagado por $X" con el registrado.
 - Las pruebas se ejecutan en un solo simulador con `-parallel-testing-enabled NO`.
+- `PaymentsCSVFile` vive en `Features/Tools` (no en `SystemServices`), porque `Features` no depende de `SystemServices`; recibe una función que ejecuta `ExportPaymentsUseCase`, y el CSV se genera cuando la hoja de compartir lo pide, no al dibujar el menú. `CSVPaymentExporter` (en `SystemServices`) implementa el puerto `PaymentsExporting`.
+- Se agregó `GetSettingsUseCase` para que `SettingsViewModel` lea los valores actuales sin tocar el repositorio.
+- El Dashboard usa una `List` con secciones como tarjetas (no `ScrollView`), por la misma razón que las demás pantallas con lista.
+- La lectura de montos escritos por el usuario está en `AmountInput` (formulario de pago, salario y ¿Puedo costearlo?).
 - Antes de probar en un iPhone físico hay que registrar el App Group `group.com.davidddfm.calendariodepagos` y asignar el equipo de firma.
 
 ## 20. Referencias

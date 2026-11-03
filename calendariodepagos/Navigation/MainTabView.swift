@@ -16,7 +16,9 @@ struct MainTabView: View {
                         onAddPayment: { router.sheet = .newPayment },
                         onSelectPayment: { router.sheet = .editPayment($0) },
                         onOpenFortnight: { router.homePath.append(.fortnight($0)) },
-                        onOpenHistory: { router.homePath.append(.history) }
+                        onOpenHistory: { router.homePath.append(.history) },
+                        onOpenSettings: { router.homePath.append(.settings) },
+                        exportFile: container.makePaymentsCSVFile()
                     )
                     .toolbar { addPaymentButton }
                     .navigationDestination(for: AppRoute.self) { destination($0, path: $router.homePath) }
@@ -25,12 +27,19 @@ struct MainTabView: View {
                 Label("Inicio", systemImage: "house")
             }
 
-            // Calendario (iteración 4) y Perfil (iteración 3) todavía no tienen contenido propio.
+            // La vista mensual llega en la iteración 4; las herramientas ya están en su barra (CAL-07).
             Tab(value: AppTab.calendar) {
                 NavigationStack(path: $router.calendarPath) {
                     ContentUnavailableView("Calendario", systemImage: "calendar")
                         .navigationTitle("Calendario")
-                        .toolbar { addPaymentButton }
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                ToolsMenu(exportFile: container.makePaymentsCSVFile()) {
+                                    router.calendarPath.append(AppRoute($0))
+                                }
+                            }
+                            addPaymentButton
+                        }
                         .navigationDestination(for: AppRoute.self) { destination($0, path: $router.calendarPath) }
                 }
             } label: {
@@ -39,10 +48,13 @@ struct MainTabView: View {
 
             Tab(value: AppTab.profile) {
                 NavigationStack(path: $router.profilePath) {
-                    ContentUnavailableView("Perfil", systemImage: "person.crop.circle")
-                        .navigationTitle("Perfil")
-                        .toolbar { addPaymentButton }
-                        .navigationDestination(for: AppRoute.self) { destination($0, path: $router.profilePath) }
+                    DashboardView(
+                        viewModel: container.makeDashboardViewModel(),
+                        onConfigureSalary: { router.profilePath.append(.settings) },
+                        onOpenHistory: { router.profilePath.append(.history) }
+                    )
+                    .toolbar { addPaymentButton }
+                    .navigationDestination(for: AppRoute.self) { destination($0, path: $router.profilePath) }
                 }
             } label: {
                 Label("Perfil", systemImage: "person.crop.circle")
@@ -61,13 +73,26 @@ struct MainTabView: View {
         case .fortnight(let fortnight):
             FortnightDetailView(
                 viewModel: container.makeFortnightViewModel(fortnight: fortnight),
-                onSelectPayment: { router.sheet = .editPayment($0) })
+                onSelectPayment: { router.sheet = .editPayment($0) },
+                onConfigureSalary: { path.wrappedValue.append(.settings) })
         case .history:
             HistoryView(
                 viewModel: container.makeHistoryViewModel(),
                 onOpenMonth: { path.wrappedValue.append(.historyMonth($0)) })
         case .historyMonth(let period):
             HistoryMonthView(viewModel: container.makeHistoryMonthViewModel(period: period))
+        case .settings:
+            SettingsView(viewModel: container.makeSettingsViewModel())
+        case .affordability:
+            AffordabilityView(
+                viewModel: container.makeAffordabilityViewModel(),
+                onConfigureSalary: { path.wrappedValue.append(.settings) })
+        case .leakDetector:
+            LeakDetectorView(viewModel: container.makeLeakDetectorViewModel())
+        case .budgetPlan:
+            BudgetPlanView(
+                viewModel: container.makeBudgetPlanViewModel(),
+                onConfigureSalary: { path.wrappedValue.append(.settings) })
         }
     }
 

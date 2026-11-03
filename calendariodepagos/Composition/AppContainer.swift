@@ -15,6 +15,7 @@ final class AppContainer {
     private let records: any PaymentRecordRepository
     private let clock: any DateProviding = SystemClock()
     private let sideEffects: AppSideEffects
+    private let exporter: CSVPaymentExporter
 
     init(storage: Storage = .appGroup) throws {
         modelContainer = try PersistenceStack.makeContainer(inMemory: storage.isInMemory)
@@ -29,6 +30,9 @@ final class AppContainer {
             defaults: defaults,
             hasStoredPayments: { (try? payments.payments(includingDeleted: true).isEmpty) == false })
         sideEffects = AppSideEffects(tracker: tracker)
+        exporter = CSVPaymentExporter(timeZone: clock.calendar.timeZone)
+        // §8.4: los CSV de sesiones anteriores no se conservan.
+        try? exporter.removeExports()
     }
 
     enum Storage {
@@ -97,6 +101,36 @@ extension AppContainer: ScreenFactory {
             getStatement: GetMonthStatementUseCase(payments: payments, records: records, clock: clock),
             togglePaid: togglePaid
         )
+    }
+
+    func makeDashboardViewModel() -> DashboardViewModel {
+        DashboardViewModel(getDashboard: GetDashboardUseCase(payments: payments, settings: settings, clock: clock))
+    }
+
+    func makeSettingsViewModel() -> SettingsViewModel {
+        SettingsViewModel(
+            getSettings: GetSettingsUseCase(settings: settings),
+            updateSalary: UpdateSalaryUseCase(settings: settings, observer: sideEffects),
+            changeCurrency: ChangeCurrencyUseCase(settings: settings, observer: sideEffects)
+        )
+    }
+
+    func makeAffordabilityViewModel() -> AffordabilityViewModel {
+        AffordabilityViewModel(
+            evaluateAffordability: EvaluateAffordabilityUseCase(payments: payments, settings: settings, clock: clock))
+    }
+
+    func makeLeakDetectorViewModel() -> LeakDetectorViewModel {
+        LeakDetectorViewModel(getReport: GetLeakReportUseCase(payments: payments, clock: clock))
+    }
+
+    func makeBudgetPlanViewModel() -> BudgetPlanViewModel {
+        BudgetPlanViewModel(getPlan: GetBudgetPlanUseCase(settings: settings))
+    }
+
+    func makePaymentsCSVFile() -> PaymentsCSVFile {
+        let export = ExportPaymentsUseCase(payments: payments, settings: settings, exporter: exporter, clock: clock)
+        return PaymentsCSVFile { try export.execute() }
     }
 
     private var togglePaid: TogglePaymentPaidUseCase {

@@ -15,6 +15,18 @@ enum AppRoute: Hashable {
     case history
     /// HIS-03
     case historyMonth(YearMonth)
+    /// CFG-01, MND-03
+    case settings
+    /// HER-01 a HER-07
+    case affordability, leakDetector, budgetPlan
+
+    init(_ tool: ToolsMenu.Tool) {
+        switch tool {
+        case .affordability: self = .affordability
+        case .leakDetector: self = .leakDetector
+        case .budgetPlan: self = .budgetPlan
+        }
+    }
 }
 
 enum AppSheet: Identifiable {

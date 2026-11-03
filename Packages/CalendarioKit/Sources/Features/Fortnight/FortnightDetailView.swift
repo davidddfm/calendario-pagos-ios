@@ -7,10 +7,16 @@ public struct FortnightDetailView: View {
     @State private var viewModel: FortnightViewModel
     @Environment(DataChangeTracker.self) private var changes
     private let onSelectPayment: (UUID) -> Void
+    private let onConfigureSalary: () -> Void
 
-    public init(viewModel: FortnightViewModel, onSelectPayment: @escaping (UUID) -> Void) {
+    public init(
+        viewModel: FortnightViewModel,
+        onSelectPayment: @escaping (UUID) -> Void,
+        onConfigureSalary: @escaping () -> Void
+    ) {
         _viewModel = State(initialValue: viewModel)
         self.onSelectPayment = onSelectPayment
+        self.onConfigureSalary = onConfigureSalary
     }
 
     public var body: some View {
@@ -39,11 +45,12 @@ public struct FortnightDetailView: View {
                         }
                         .accessibilityElement(children: .combine)
                     } else {
-                        // QUI-04. El acceso a Ajustes llega con la pantalla de Ajustes (iteración 3).
+                        // QUI-04
                         SalaryRequiredCard(
                             message: Text(
                                 "Con tu salario neto mensual calculamos cuánto te queda en cada quincena.",
-                                bundle: .module))
+                                bundle: .module),
+                            onConfigure: onConfigureSalary)
                     }
                     HStack {
                         Text("Total de pagos", bundle: .module)

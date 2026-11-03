@@ -89,7 +89,7 @@ public final class PaymentFormViewModel {
         do {
             let payment = try getPayment.execute(id: id)
             name = payment.name
-            amountText = payment.amount.decimal.formatted(.number.grouping(.never).locale(locale))
+            amountText = AmountInput.text(payment.amount, locale: locale)
             dayOfMonth = payment.dayOfMonth
             category = payment.category
             hasEditedName = false
@@ -127,11 +127,7 @@ public final class PaymentFormViewModel {
 
     // MARK: - Monto
 
-    private var parsedDecimal: Decimal? {
-        let text = amountText.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !text.isEmpty else { return nil }
-        return try? Decimal.FormatStyle(locale: locale).parseStrategy.parse(text)
-    }
+    private var parsedDecimal: Decimal? { AmountInput.decimal(amountText, locale: locale) }
 
     private var amount: Money? { parsedDecimal.flatMap(Money.init(validatingInput:)) }
 }

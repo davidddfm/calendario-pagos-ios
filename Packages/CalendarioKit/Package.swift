@@ -34,6 +34,7 @@ let package = Package(
 
         .testTarget(name: "DomainTests", dependencies: ["Domain", "TestSupport"]),
         .testTarget(name: "PersistenceTests", dependencies: ["Persistence", "Domain", "TestSupport"]),
+        .testTarget(name: "SystemServicesTests", dependencies: ["SystemServices", "Domain", "TestSupport"]),
         .testTarget(
             name: "FeaturesTests", dependencies: ["Features", "Domain", "TestSupport"],
             swiftSettings: mainActorByDefault),

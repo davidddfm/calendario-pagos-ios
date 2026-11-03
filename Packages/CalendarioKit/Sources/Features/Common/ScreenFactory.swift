@@ -8,4 +8,11 @@ public protocol ScreenFactory {
     func makeFortnightViewModel(fortnight: Fortnight) -> FortnightViewModel
     func makeHistoryViewModel() -> HistoryViewModel
     func makeHistoryMonthViewModel(period: YearMonth) -> HistoryMonthViewModel
+    func makeDashboardViewModel() -> DashboardViewModel
+    func makeSettingsViewModel() -> SettingsViewModel
+    func makeAffordabilityViewModel() -> AffordabilityViewModel
+    func makeLeakDetectorViewModel() -> LeakDetectorViewModel
+    func makeBudgetPlanViewModel() -> BudgetPlanViewModel
+    /// HER-08 / HER-10: archivo para `ShareLink` desde Inicio y Calendario.
+    func makePaymentsCSVFile() -> PaymentsCSVFile
 }
