@@ -9,6 +9,8 @@ import SystemServices
 final class AppContainer {
     let tracker = DataChangeTracker()
     let settings: any SettingsRepository
+    /// SEG-01 a SEG-04: una única instancia para toda la vida de la app.
+    let appLock: AppLockController
 
     private let modelContainer: ModelContainer
     private let payments: any PaymentRepository
@@ -16,6 +18,8 @@ final class AppContainer {
     private let clock: any DateProviding = SystemClock()
     private let sideEffects: AppSideEffects
     private let exporter: CSVPaymentExporter
+    private let reminderScheduler: any ReminderScheduling
+    private let authenticator: any DeviceOwnerAuthenticating
 
     init(storage: Storage = .appGroup) throws {
         modelContainer = try PersistenceStack.makeContainer(inMemory: storage.isInMemory)
@@ -33,6 +37,26 @@ final class AppContainer {
         exporter = CSVPaymentExporter(timeZone: clock.calendar.timeZone)
         // §8.4: los CSV de sesiones anteriores no se conservan.
         try? exporter.removeExports()
+        reminderScheduler = storage.reminderScheduler
+        authenticator = storage.authenticator
+        appLock = AppLockController(
+            getSettings: GetSettingsUseCase(settings: settings),
+            updateAppLock: UpdateAppLockSettingsUseCase(settings: settings),
+            authenticator: authenticator,
+            clock: clock)
+        let reschedule = RescheduleRemindersUseCase(
+            payments: payments, records: records, settings: settings, scheduler: reminderScheduler, clock: clock)
+        // El cierre retiene el almacén: una reconciliación pendiente nunca lee un `ModelContext` sin contenedor.
+        sideEffects.connect { [modelContainer] in
+            withExtendedLifetime(modelContainer) {}
+            try await reschedule.execute()
+        }
+    }
+
+    /// NOT-04: renueva la ventana de avisos (al activar la app, al cambiar el reloj y en segundo plano).
+    @discardableResult
+    func reconcileReminders() -> Task<Void, Never> {
+        sideEffects.reconcileReminders()
     }
 
     enum Storage {
@@ -47,6 +71,24 @@ final class AppContainer {
             case .appGroup: false
             #if DEBUG
                 case .uiTesting: true
+            #endif
+            }
+        }
+
+        var reminderScheduler: any ReminderScheduling {
+            switch self {
+            case .appGroup: UserNotificationReminderScheduler(route: DeepLink.today.rawValue)
+            #if DEBUG
+                case .uiTesting: UITestingReminderScheduler()
+            #endif
+            }
+        }
+
+        var authenticator: any DeviceOwnerAuthenticating {
+            switch self {
+            case .appGroup: LocalAuthenticationService()
+            #if DEBUG
+                case .uiTesting: UITestingAuthenticator()
             #endif
             }
         }
@@ -123,7 +165,13 @@ extension AppContainer: ScreenFactory {
         SettingsViewModel(
             getSettings: GetSettingsUseCase(settings: settings),
             updateSalary: UpdateSalaryUseCase(settings: settings, observer: sideEffects),
-            changeCurrency: ChangeCurrencyUseCase(settings: settings, observer: sideEffects)
+            changeCurrency: ChangeCurrencyUseCase(settings: settings, observer: sideEffects),
+            updateReminders: UpdateReminderSettingsUseCase(settings: settings, observer: sideEffects),
+            getReminderAuthorization: GetReminderAuthorizationUseCase(scheduler: reminderScheduler),
+            requestReminderPermission: requestReminderPermission,
+            updateAppLock: UpdateAppLockSettingsUseCase(settings: settings),
+            authenticator: authenticator,
+            calendar: clock.calendar
         )
     }
 
@@ -145,6 +193,10 @@ extension AppContainer: ScreenFactory {
         return PaymentsCSVFile { try export.execute() }
     }
 
+    private var requestReminderPermission: RequestReminderPermissionUseCase {
+        RequestReminderPermissionUseCase(settings: settings, scheduler: reminderScheduler, observer: sideEffects)
+    }
+
     private var togglePaid: TogglePaymentPaidUseCase {
         TogglePaymentPaidUseCase(payments: payments, records: records, clock: clock, observer: sideEffects)
     }
@@ -156,7 +208,10 @@ extension AppContainer: ScreenFactory {
             createPayment: CreatePaymentUseCase(payments: payments, clock: clock, observer: sideEffects),
             updatePayment: UpdatePaymentUseCase(payments: payments, clock: clock, observer: sideEffects),
             deletePayment: DeletePaymentUseCase(payments: payments, clock: clock, observer: sideEffects),
-            getPayment: GetPaymentUseCase(payments: payments)
+            getPayment: GetPaymentUseCase(payments: payments),
+            shouldOfferReminderPermission: ShouldOfferReminderPermissionUseCase(
+                settings: settings, scheduler: reminderScheduler),
+            requestReminderPermission: requestReminderPermission
         )
     }
 }

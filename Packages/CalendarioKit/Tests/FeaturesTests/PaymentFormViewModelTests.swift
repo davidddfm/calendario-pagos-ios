@@ -9,15 +9,17 @@ import Testing
 struct PaymentFormViewModelTests {
     let payments = InMemoryPaymentRepository()
     let observer = SpyChangeObserver()
+    let settings = InMemorySettingsRepository(AppSettings(currency: .usd, hasCompletedOnboarding: true))
     let clock: FixedClock
 
     init() throws {
         clock = FixedClock(now: try Calendar.testGregorian.date(year: 2026, month: 10, day: 20))
     }
 
-    private func makeViewModel(_ mode: PaymentFormViewModel.Mode = .create, defaultDay: Int = 20)
-        -> PaymentFormViewModel
-    {
+    private func makeViewModel(
+        _ mode: PaymentFormViewModel.Mode = .create, defaultDay: Int = 20,
+        scheduler: SpyReminderScheduler = SpyReminderScheduler(status: .authorized)
+    ) -> PaymentFormViewModel {
         PaymentFormViewModel(
             mode: mode,
             defaultDay: defaultDay,
@@ -25,6 +27,10 @@ struct PaymentFormViewModelTests {
             updatePayment: UpdatePaymentUseCase(payments: payments, clock: clock, observer: observer),
             deletePayment: DeletePaymentUseCase(payments: payments, clock: clock, observer: observer),
             getPayment: GetPaymentUseCase(payments: payments),
+            shouldOfferReminderPermission: ShouldOfferReminderPermissionUseCase(
+                settings: settings, scheduler: scheduler),
+            requestReminderPermission: RequestReminderPermissionUseCase(
+                settings: settings, scheduler: scheduler, observer: observer),
             locale: Locale(identifier: "en_US")
         )
     }
@@ -137,5 +143,45 @@ struct PaymentFormViewModelTests {
 
         #expect(try payments.payment(id: payment.id)?.deletedAt == clock.now)
         #expect(viewModel.didFinish)
+    }
+
+    @Test("NOT-06 / S-08 · Tras el primer pago se explica el permiso una sola vez")
+    func reminderPrompt() async throws {
+        let scheduler = SpyReminderScheduler(status: .notDetermined)
+        let viewModel = makeViewModel(scheduler: scheduler)
+        await viewModel.prepareReminderPermission()
+        viewModel.name = "Renta"
+        viewModel.amountText = "500"
+        viewModel.save()
+        #expect(viewModel.showsReminderPrompt)
+        #expect(!viewModel.didFinish)
+
+        await viewModel.respondToReminderPrompt(accepted: true)
+        #expect(viewModel.didFinish)
+        #expect(await scheduler.requestCount == 1)
+        #expect(settings.stored.reminders.hasOfferedPermission)
+
+        // El segundo pago ya no lo ofrece.
+        let second = makeViewModel(scheduler: SpyReminderScheduler(status: .notDetermined))
+        await second.prepareReminderPermission()
+        second.name = "Luz"
+        second.amountText = "80"
+        second.save()
+        #expect(!second.showsReminderPrompt)
+        #expect(second.didFinish)
+    }
+
+    @Test("NOT-06 · \"Ahora no\" no muestra el diálogo del sistema")
+    func reminderPromptDeclined() async {
+        let scheduler = SpyReminderScheduler(status: .notDetermined)
+        let viewModel = makeViewModel(scheduler: scheduler)
+        await viewModel.prepareReminderPermission()
+        viewModel.name = "Renta"
+        viewModel.amountText = "500"
+        viewModel.save()
+        await viewModel.respondToReminderPrompt(accepted: false)
+        #expect(viewModel.didFinish)
+        #expect(await scheduler.requestCount == 0)
+        #expect(settings.stored.reminders.hasOfferedPermission)
     }
 }

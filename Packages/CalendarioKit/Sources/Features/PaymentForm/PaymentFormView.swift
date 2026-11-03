@@ -58,6 +58,27 @@ public struct PaymentFormView: View {
             viewModel.load()
             if !viewModel.isEditing { focusedField = .name }
         }
+        .task { await viewModel.prepareReminderPermission() }
+        // NOT-06 / S-08: dos botones de igual peso; ninguno imita el diálogo del sistema.
+        .alert(
+            Text("¿Quieres que te recordemos tus pagos?", bundle: .module),
+            isPresented: Binding(get: { viewModel.showsReminderPrompt }, set: { _ in })
+        ) {
+            Button {
+                Task { await viewModel.respondToReminderPrompt(accepted: true) }
+            } label: {
+                Text("Activar recordatorios", bundle: .module)
+            }
+            Button {
+                Task { await viewModel.respondToReminderPrompt(accepted: false) }
+            } label: {
+                Text("Ahora no", bundle: .module)
+            }
+        } message: {
+            Text(
+                "Te avisamos una vez al día, solo los días con pagos, con sus nombres y nunca con montos. Puedes cambiarlo en Configuración.",
+                bundle: .module)
+        }
         .onChange(of: viewModel.didFinish) { _, finished in
             if finished { dismiss() }
         }

@@ -18,7 +18,8 @@ struct MainTabView: View {
                         onOpenFortnight: { router.homePath.append(.fortnight($0)) },
                         onOpenHistory: { router.homePath.append(.history) },
                         onOpenSettings: { router.homePath.append(.settings) },
-                        exportFile: container.makePaymentsCSVFile()
+                        exportFile: container.makePaymentsCSVFile(),
+                        scrollToTodayRequest: router.homeScrollRequest
                     )
                     .toolbar { addPaymentButton }
                     .navigationDestination(for: AppRoute.self) { destination($0, path: $router.homePath) }

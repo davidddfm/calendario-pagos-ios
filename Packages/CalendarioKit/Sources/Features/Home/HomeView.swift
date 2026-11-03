@@ -12,6 +12,8 @@ public struct HomeView: View {
     private let onOpenHistory: () -> Void
     private let onOpenSettings: () -> Void
     private let exportFile: PaymentsCSVFile
+    /// NOT-09: cada cambio lleva "Para hoy" a la vista.
+    private let scrollToTodayRequest: Int
 
     public init(
         viewModel: HomeViewModel,
@@ -20,7 +22,8 @@ public struct HomeView: View {
         onOpenFortnight: @escaping (Fortnight) -> Void,
         onOpenHistory: @escaping () -> Void,
         onOpenSettings: @escaping () -> Void,
-        exportFile: PaymentsCSVFile
+        exportFile: PaymentsCSVFile,
+        scrollToTodayRequest: Int = 0
     ) {
         _viewModel = State(initialValue: viewModel)
         self.onAddPayment = onAddPayment
@@ -29,6 +32,7 @@ public struct HomeView: View {
         self.onOpenHistory = onOpenHistory
         self.onOpenSettings = onOpenSettings
         self.exportFile = exportFile
+        self.scrollToTodayRequest = scrollToTodayRequest
     }
 
     public var body: some View {
@@ -134,6 +138,10 @@ public struct HomeView: View {
                 }
             }
         }
+        // NOT-09: "Para hoy" es la primera sección; una lista nueva arranca arriba. `ScrollViewReader` alrededor de
+        // la `List` rompe su diff al borrar filas.
+        .id(scrollToTodayRequest)
+        .onChange(of: scrollToTodayRequest) { viewModel.searchText = "" }
     }
 
     @ViewBuilder

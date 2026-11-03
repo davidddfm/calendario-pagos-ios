@@ -1437,7 +1437,7 @@ No hay proceso de cierre. Al detectarse un día nuevo (`significantTimeChangeNot
 
 ## 13. Matriz de trazabilidad
 
-Estado de implementación al 2026-11-02 (fin de la iteración 4): ✅ implementada y probada · 🟡 parcial (la regla de dominio está lista y probada; falta la pantalla o la integración indicada) · ⬜ pendiente.
+Estado de implementación al 2026-11-02 (fin de la iteración 5): ✅ implementada y probada · 🟡 parcial (la regla de dominio está lista y probada; falta la pantalla o la integración indicada) · ⬜ pendiente.
 
 | Regla | Componente principal | Caso de uso / regla de dominio | Prueba | Estado |
 | --- | --- | --- | --- | --- |
@@ -1487,15 +1487,15 @@ Estado de implementación al 2026-11-02 (fin de la iteración 4): ✅ implementa
 | HER-08 | — | `CSVPaymentExporter` | Unit: nombre, BOM, escapado | ✅ `CSVPaymentExporter` en `SystemServices`; Unit: nombre con zona local, BOM, CRLF, escapado y fórmulas |
 | HER-09 | `ShareLink` | `PaymentsCSVFile: Transferable` | Manual (hoja de compartir) | 🟡 `ShareLink` con `PaymentsCSVFile` (genera el archivo al compartir); falta la prueba manual de la hoja de compartir |
 | HER-10 | Menús de Inicio y Calendario | `ExportPaymentsUseCase` | UI | ✅ Menú de Inicio y menú Herramientas del Calendario |
-| NOT-01 | — | `ReminderSettings()` | Unit: valores por defecto | 🟡 Valores por defecto probados; falta programar avisos |
-| NOT-02 | `SettingsView` | `UpdateReminderSettingsUseCase` → reprogramación | Unit con `ReminderScheduling` simulado | ⬜ |
-| NOT-03 | — | `ReminderPlanner` (días vacíos, 1 por día) | Unit | 🟡 `ReminderPlanner` probado; falta el programador del sistema |
-| NOT-04 | — | Avisos locales persistentes + ventana 60 días + BGAppRefresh | Manual: reiniciar dispositivo | ⬜ |
-| NOT-05 | Interruptor | `removeAll()` | Unit | 🟡 El planificador devuelve `[]`; falta `removeAll()` e interruptor |
-| NOT-06 | Explicación tras el primer pago, `SettingsView` | `RequestReminderPermissionUseCase` | Manual + Unit del estado | ⬜ |
-| NOT-07 | — | `ReminderText.body` (sin montos) | Unit | 🟡 El plan solo lleva nombres; falta `ReminderText.body` |
-| NOT-08 | — | `ReminderPlanner` omite el día si todo está pagado | Unit | 🟡 `ReminderPlanner` probado; falta el programador del sistema |
-| NOT-09 | `NotificationDelegate` | `DeepLink.today` | Unit del router + Manual | ⬜ |
+| NOT-01 | — | `ReminderSettings()` | Unit: valores por defecto | ✅ Unit: valores por defecto y `SystemSettingsViewModelTests.reminders`; UI: `testRemindersToggle` |
+| NOT-02 | `SettingsView` | `UpdateReminderSettingsUseCase` → reprogramación | Unit con `ReminderScheduling` simulado | ✅ `DatePicker` en Ajustes → `UpdateReminderSettingsUseCase` → `AppSideEffects` reprograma |
+| NOT-03 | — | `ReminderPlanner` (días vacíos, 1 por día) | Unit | ✅ `ReminderPlanner` + `UserNotificationReminderScheduler` (reconciliación por diferencias) |
+| NOT-04 | — | Avisos locales persistentes + ventana 60 días + BGAppRefresh | Manual: reiniciar dispositivo | 🟡 Avisos locales + ventana de 60 días renovada al activar, al cambiar el reloj y en `BGAppRefreshTask`; falta la prueba manual de reinicio |
+| NOT-05 | Interruptor | `removeAll()` | Unit | ✅ Interruptor en Ajustes → `removeAll()`; Unit + UI |
+| NOT-06 | Explicación tras el primer pago, `SettingsView` | `RequestReminderPermissionUseCase` | Manual + Unit del estado | ✅ Explicación tras el primer pago ("Activar recordatorios" / "Ahora no"), estado bloqueado en Ajustes con acceso a los ajustes del iPhone; Unit |
+| NOT-07 | — | `ReminderText.body` (sin montos) | Unit | ✅ `ReminderText.body` (sin montos, "y N más"); Unit del texto y del contenido del aviso |
+| NOT-08 | — | `ReminderPlanner` omite el día si todo está pagado | Unit | ✅ Reprogramación tras marcar o desmarcar (`.paymentStatus`) |
+| NOT-09 | `NotificationDelegate` | `DeepLink.today` | Unit del router + Manual | 🟡 `NotificationDelegate` → `DeepLink.today` → `AppRouter.handle`; Unit del enlace y del router. Falta la prueba manual de tocar un aviso real |
 | CFG-01 | `SettingsView` | `UpdateSalaryUseCase` | Unit | ✅ `SettingsView` + `UpdateSalaryUseCase`, con "Quitar salario" |
 | MND-01 | `OnboardingView` | `CompleteOnboardingUseCase` | UI: primer arranque | ✅ |
 | MND-02 | `MoneyText` | `MoneyFormatter` | Unit: es_MX/USD → "$", es_ES/EUR → "€" | 🟡 `MoneyText` en uso y verificado por UI; falta la prueba unitaria por región |
@@ -1504,11 +1504,11 @@ Estado de implementación al 2026-11-02 (fin de la iteración 4): ✅ implementa
 | CAT-01 | Sin UI de gestión | `PaymentCategory` (enum cerrado) | Revisión de código | ✅ |
 | CAT-02 | `Picker` | `PaymentCategory.allCases`, `.default` | Unit | ✅ |
 | CAT-03 | `CategoryBadge`, CSV | `localizedName` | Unit | ✅ Formulario, Inicio, Dashboard, Fugas y CSV |
-| SEG-01 | Interruptor | `UpdateAppLockSettingsUseCase`, `AppLockSettings()` | Unit | 🟡 `AppLockSettings()` probado; falta interruptor y bloqueo |
-| SEG-02 | `Picker` | `LockGracePeriod`, `AppLockController` | Unit con `FixedClock` | 🟡 `LockGracePeriod` listo; falta `AppLockController` |
-| SEG-03 | `RootView` → `AppLockView` | `isLocked` | UI | ⬜ |
-| SEG-04 | Alerta | `availability() == .passcodeNotSet` | Unit con autenticador simulado | ⬜ |
-| APA-01 | Colores semánticos | — | Previews claro/oscuro | 🟡 Sigue el modo del sistema (no se fuerza); faltan colores semánticos y previews en oscuro |
+| SEG-01 | Interruptor | `UpdateAppLockSettingsUseCase`, `AppLockSettings()` | Unit | ✅ Interruptor con autenticación previa; Unit + UI: `testAppLockAfterBackground` |
+| SEG-02 | `Picker` | `LockGracePeriod`, `AppLockController` | Unit con `FixedClock` | ✅ `Picker` y `AppLockController` con `MutableClock` (incluye reloj que retrocede) |
+| SEG-03 | `RootView` → `AppLockView` | `isLocked` | UI | ✅ `RootView` → `AppLockView` sin datos; los enlaces esperan en `pendingDeepLink`; UI |
+| SEG-04 | Alerta | `availability() == .passcodeNotSet` | Unit con autenticador simulado | ✅ Se desactiva solo y avisa; activarlo sin código muestra una alerta; Unit |
+| APA-01 | Colores semánticos | — | Previews claro/oscuro | 🟡 No se fuerza `preferredColorScheme` y solo se usan colores del sistema; falta la revisión visual en modo oscuro (el simulador no aplicó el cambio de apariencia) |
 | WID-01 | `TodayEntry` sin dinero | `GetTodayWidgetSnapshotUseCase` | Unit (tipo sin montos) + revisión | ⬜ |
 | WID-02 | `WidgetPalette` | — | Previews de widget claro/oscuro | ⬜ |
 | WID-03 | `AppSideEffects` | `WidgetCenterRefresher` | Unit con refresco simulado | ⬜ |
@@ -1892,11 +1892,11 @@ La especificación no fija estos detalles; se adopta el criterio indicado hasta 
 | 2. Estado mensual | Marcar, quincenas, historial | MAR, QUI, HIS | ✅ Completada, más NAV-02 y PAG-06. Las casillas del Detalle del día y del widget llegan en las iteraciones 4 y 6 |
 | 3. Finanzas | Ajustes de salario, Dashboard, herramientas, exportación | CFG, DAS, HER, MND-03, MND-04 | ✅ Completada. Falta la prueba manual de la hoja de compartir (HER-09) |
 | 4. Calendario | Vista mensual, detalle del día | CAL | ✅ Completada, más MAR-01 en el Detalle del día |
-| 5. Sistema | Recordatorios, bloqueo, apariencia | NOT, SEG, APA | ⬜ Pendiente (`ReminderPlanner` ya listo) |
+| 5. Sistema | Recordatorios, bloqueo, apariencia | NOT, SEG, APA | ✅ Completada. Pendientes manuales: avisos tras reiniciar (NOT-04), tocar un aviso real (NOT-09) y revisión en modo oscuro (APA-01) |
 | 6. Widget | Familias, línea de tiempo, intención interactiva | WID | ⬜ Pendiente |
 | 7. Publicación | Accesibilidad, rendimiento, política de privacidad y soporte publicados, ficha, notas para App Review y lista de verificación de [§17.3](#173-lista-de-verificación-previa-al-envío) en TestFlight | NEG, §14.6, §14.7, §17 | ⬜ Pendiente |
 
-Notas de implementación (iteraciones 0 a 4):
+Notas de implementación (iteraciones 0 a 5):
 
 - `Package.swift` incorpora cada módulo en la iteración que lo usa; con varios productos, el esquema de pruebas del paquete es `CalendarioKit-Package`. El target `TestSupport` (reloj fijo, repositorios en memoria, datos de ejemplo) solo lo usan las pruebas.
 - `MonthStatement.Item` añade `scheduledDay` (para calcular la quincena de un pago eliminado después de pagarlo) y `paymentExists` (Inicio oculta los pagos eliminados que solo siguen en el Historial).
@@ -1910,6 +1910,12 @@ Notas de implementación (iteraciones 0 a 4):
 - La lectura de montos escritos por el usuario está en `AmountInput` (formulario de pago, salario y ¿Puedo costearlo?).
 - Calendario: el mes actual muestra solo pagos vigentes (como Inicio); los meses pasados incluyen los eliminados después de pagarlos (como el Historial) y los futuros proyectan los pagos activos hoy. `CalendarMonth` trae las iniciales de la semana ya rotadas según `calendar.firstWeekday`. Un pago eliminado no abre la edición desde el detalle del día.
 - En la `LazyVGrid` del Calendario, encabezados, celdas vacías y días van en un único `ForEach` con ids distintos: con varios `ForEach` cuyos ids se repetían (0…6 y 1…31), SwiftUI descartaba los días 1 a 6.
+- Recordatorios: se añadieron `GetReminderAuthorizationUseCase` y `ShouldOfferReminderPermissionUseCase`, y `ReminderSettings.hasOfferedPermission` para no repetir la explicación (S-08). `RequestReminderPermissionUseCase.execute(accepted:)` registra también el "Ahora no". Los casos de uso asíncronos son `nonisolated(nonsending)`: leen los repositorios en el aislamiento de quien llama.
+- `AppSideEffects` encadena las reconciliaciones en tareas `@MainActor` (los repositorios usan el `ModelContext` principal) y el cierre retiene el `ModelContainer` mientras haya una pendiente.
+- El puerto `DeviceOwnerAuthenticating` incluye `biometry()` para nombrar "Face ID" o "Touch ID" en Ajustes.
+- `Info.plist`: las claves de matriz (`CFBundleURLTypes`, `BGTaskSchedulerPermittedIdentifiers`, `UIBackgroundModes`) están en `Config/calendariodepagos-Info.plist`, fuera de la carpeta sincronizada del target; `NSFaceIDUsageDescription` va como `INFOPLIST_KEY_`.
+- Con `-ui-testing` (solo Debug) el permiso de avisos está concedido y la autenticación tiene éxito tras 2 s, para probar el bloqueo sin diálogos del sistema.
+- Para llevar "Para hoy" a la vista (NOT-09) se recrea la `List` de Inicio con `.id(...)`: envolverla en `ScrollViewReader` rompía su diff al borrar filas.
 - Antes de probar en un iPhone físico hay que registrar el App Group `group.com.davidddfm.calendariodepagos` y asignar el equipo de firma.
 
 ## 20. Referencias

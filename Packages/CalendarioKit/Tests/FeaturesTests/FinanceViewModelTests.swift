@@ -11,11 +11,21 @@ struct SettingsViewModelTests {
     let observer = SpyChangeObserver()
     let locale = Locale(identifier: "es_MX")
 
-    private func makeViewModel() -> SettingsViewModel {
+    private func makeViewModel(
+        scheduler: SpyReminderScheduler = SpyReminderScheduler(status: .authorized),
+        authenticator: StubAuthenticator = StubAuthenticator()
+    ) -> SettingsViewModel {
         SettingsViewModel(
             getSettings: GetSettingsUseCase(settings: settings),
             updateSalary: UpdateSalaryUseCase(settings: settings, observer: observer),
             changeCurrency: ChangeCurrencyUseCase(settings: settings, observer: observer),
+            updateReminders: UpdateReminderSettingsUseCase(settings: settings, observer: observer),
+            getReminderAuthorization: GetReminderAuthorizationUseCase(scheduler: scheduler),
+            requestReminderPermission: RequestReminderPermissionUseCase(
+                settings: settings, scheduler: scheduler, observer: observer),
+            updateAppLock: UpdateAppLockSettingsUseCase(settings: settings),
+            authenticator: authenticator,
+            calendar: .testGregorian,
             locale: locale)
     }
 
@@ -68,6 +78,100 @@ struct SettingsViewModelTests {
         #expect(settings.stored.currency == .eur)
         #expect(viewModel.currency == .eur)
         #expect(viewModel.pendingCurrency == nil)
+    }
+}
+
+@Suite("NOT / SEG · Ajustes de recordatorios y bloqueo")
+struct SystemSettingsViewModelTests {
+    let settings = InMemorySettingsRepository(AppSettings(currency: .usd, hasCompletedOnboarding: true))
+    let observer = SpyChangeObserver()
+
+    private func makeViewModel(scheduler: SpyReminderScheduler, authenticator: StubAuthenticator) -> SettingsViewModel {
+        SettingsViewModel(
+            getSettings: GetSettingsUseCase(settings: settings),
+            updateSalary: UpdateSalaryUseCase(settings: settings, observer: observer),
+            changeCurrency: ChangeCurrencyUseCase(settings: settings, observer: observer),
+            updateReminders: UpdateReminderSettingsUseCase(settings: settings, observer: observer),
+            getReminderAuthorization: GetReminderAuthorizationUseCase(scheduler: scheduler),
+            requestReminderPermission: RequestReminderPermissionUseCase(
+                settings: settings, scheduler: scheduler, observer: observer),
+            updateAppLock: UpdateAppLockSettingsUseCase(settings: settings),
+            authenticator: authenticator,
+            calendar: .testGregorian)
+    }
+
+    @Test("NOT-02 / NOT-05 · Cambiar la hora y apagar los avisos los reprograma")
+    func reminders() async throws {
+        let viewModel = makeViewModel(
+            scheduler: SpyReminderScheduler(status: .authorized), authenticator: StubAuthenticator())
+        viewModel.load()
+        #expect(viewModel.reminders == ReminderSettings())  // NOT-01: 8:00 y activados
+
+        let nineThirty = try Calendar.testGregorian.date(year: 2001, month: 1, day: 1, hour: 21, minute: 30)
+        viewModel.setReminderTime(nineThirty)
+        #expect(settings.stored.reminders.hour == 21)
+        #expect(settings.stored.reminders.minute == 30)
+
+        await viewModel.setRemindersEnabled(false)
+        #expect(!settings.stored.reminders.isEnabled)
+        #expect(observer.changes == [.reminderSettings, .reminderSettings])
+    }
+
+    @Test("NOT-06 · Permiso denegado y petición desde Ajustes")
+    func authorization() async {
+        let denied = makeViewModel(scheduler: SpyReminderScheduler(status: .denied), authenticator: StubAuthenticator())
+        await denied.refreshReminderAuthorization()
+        #expect(denied.reminderAuthorization == .denied)
+
+        let scheduler = SpyReminderScheduler(status: .notDetermined)
+        let undetermined = makeViewModel(scheduler: scheduler, authenticator: StubAuthenticator())
+        await undetermined.refreshReminderAuthorization()
+        await undetermined.requestPermission()
+        #expect(undetermined.reminderAuthorization == .authorized)
+        #expect(await scheduler.requestCount == 1)
+    }
+
+    @Test("SEG-01 · Activar el bloqueo exige autenticarse; si falla, queda apagado")
+    func lock() async {
+        let authenticator = StubAuthenticator(result: .cancelled)
+        let viewModel = makeViewModel(
+            scheduler: SpyReminderScheduler(status: .authorized), authenticator: authenticator)
+        viewModel.load()
+        await viewModel.setLockEnabled(true)
+        #expect(!settings.stored.appLock.isEnabled)
+
+        authenticator.set(result: .success)
+        await viewModel.setLockEnabled(true)
+        #expect(settings.stored.appLock.isEnabled)
+        #expect(viewModel.appLock.isEnabled)
+
+        viewModel.setGracePeriod(.fiveMinutes)  // SEG-02
+        #expect(settings.stored.appLock.gracePeriod == .fiveMinutes)
+
+        await viewModel.setLockEnabled(false)
+        #expect(!settings.stored.appLock.isEnabled)
+        #expect(authenticator.authenticationCount == 2)  // apagarlo no pide autenticación
+    }
+
+    @Test("SEG-04 · Sin código en el iPhone no se puede activar")
+    func lockWithoutPasscode() async {
+        let viewModel = makeViewModel(
+            scheduler: SpyReminderScheduler(status: .authorized),
+            authenticator: StubAuthenticator(availability: .passcodeNotSet))
+        viewModel.load()
+        await viewModel.setLockEnabled(true)
+        #expect(viewModel.showsPasscodeRequiredAlert)
+        #expect(!settings.stored.appLock.isEnabled)
+    }
+
+    @Test("Editar un ajuste no borra el salario que se está escribiendo")
+    func keepsSalaryDraft() async {
+        let viewModel = makeViewModel(
+            scheduler: SpyReminderScheduler(status: .authorized), authenticator: StubAuthenticator())
+        viewModel.load()
+        viewModel.salaryText = "1500"
+        await viewModel.setRemindersEnabled(false)
+        #expect(viewModel.salaryText == "1500")
     }
 }
 

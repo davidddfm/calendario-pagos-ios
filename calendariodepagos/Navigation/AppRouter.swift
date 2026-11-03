@@ -59,4 +59,19 @@ final class AppRouter {
     var calendarPath: [AppRoute] = []
     var profilePath: [AppRoute] = []
     var sheet: AppSheet?
+    /// Cada incremento lleva "Para hoy" a la vista (NOT-09).
+    private(set) var homeScrollRequest = 0
+    /// SEG-03: el enlace espera aquí hasta desbloquear.
+    var pendingDeepLink: DeepLink?
+
+    /// Un enlace profundo solo navega (§9.3).
+    func handle(_ link: DeepLink) {
+        switch link {
+        case .today:
+            sheet = nil
+            selectedTab = .home
+            homePath = []
+            homeScrollRequest &+= 1
+        }
+    }
 }

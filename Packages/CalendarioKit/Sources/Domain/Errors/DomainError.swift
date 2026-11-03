@@ -11,6 +11,8 @@ public enum DomainError: Error, Equatable, Sendable {
     case invalidPayment([PaymentValidationError])
     /// El calendario no pudo construir una fecha del mes (no ocurre con el calendario gregoriano).
     case invalidDate
+    /// NOT-02: hora fuera de 0–23 o minuto fuera de 0–59.
+    case invalidReminderTime
 }
 
 extension DomainError: LocalizedError {
@@ -22,6 +24,7 @@ extension DomainError: LocalizedError {
         case .invalidPayment(let errors):
             errors.first?.errorDescription ?? String(localized: "Revisa los datos del pago.", bundle: .module)
         case .invalidDate: String(localized: "No se pudo mostrar esa fecha.", bundle: .module)
+        case .invalidReminderTime: String(localized: "Elige una hora válida para el aviso.", bundle: .module)
         }
     }
 }

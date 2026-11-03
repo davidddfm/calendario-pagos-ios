@@ -26,6 +26,8 @@ public final class PaymentFormViewModel {
     public private(set) var actionError: UserFacingError?
     /// La vista se cierra cuando pasa a `true`.
     public private(set) var didFinish = false
+    /// S-08 / NOT-06: explicación previa al permiso de notificaciones, tras guardar el primer pago.
+    public private(set) var showsReminderPrompt = false
 
     private var hasEditedName = false
     private var hasEditedAmount = false
@@ -33,6 +35,9 @@ public final class PaymentFormViewModel {
     private let updatePayment: UpdatePaymentUseCase
     private let deletePayment: DeletePaymentUseCase
     private let getPayment: GetPaymentUseCase
+    private let shouldOfferReminderPermission: ShouldOfferReminderPermissionUseCase
+    private let requestReminderPermission: RequestReminderPermissionUseCase
+    private var offersReminderPermission = false
     private let locale: Locale
 
     public init(
@@ -42,6 +47,8 @@ public final class PaymentFormViewModel {
         updatePayment: UpdatePaymentUseCase,
         deletePayment: DeletePaymentUseCase,
         getPayment: GetPaymentUseCase,
+        shouldOfferReminderPermission: ShouldOfferReminderPermissionUseCase,
+        requestReminderPermission: RequestReminderPermissionUseCase,
         locale: Locale = .autoupdatingCurrent
     ) {
         self.mode = mode
@@ -50,6 +57,8 @@ public final class PaymentFormViewModel {
         self.updatePayment = updatePayment
         self.deletePayment = deletePayment
         self.getPayment = getPayment
+        self.shouldOfferReminderPermission = shouldOfferReminderPermission
+        self.requestReminderPermission = requestReminderPermission
         self.locale = locale
     }
 
@@ -103,13 +112,32 @@ public final class PaymentFormViewModel {
         guard canSave else { return }
         do {
             switch mode {
-            case .create: try createPayment.execute(draft)
+            case .create:
+                try createPayment.execute(draft)
+                if offersReminderPermission {
+                    showsReminderPrompt = true
+                    return
+                }
             case .edit(let id): try updatePayment.execute(id: id, draft: draft)
             }
             didFinish = true
         } catch {
             actionError = UserFacingError(error)
         }
+    }
+
+    /// S-08: se consulta al abrir el formulario de alta, antes de guardar.
+    public func prepareReminderPermission() async {
+        guard mode == .create else { return }
+        offersReminderPermission = await shouldOfferReminderPermission.execute()
+    }
+
+    /// NOT-06: "Activar recordatorios" muestra el diálogo del sistema; "Ahora no" no vuelve a preguntar.
+    public func respondToReminderPrompt(accepted: Bool) async {
+        showsReminderPrompt = false
+        // El pago ya se guardó: un fallo al registrar la respuesta no debe impedir cerrar la hoja.
+        _ = try? await requestReminderPermission.execute(accepted: accepted)
+        didFinish = true
     }
 
     /// PAG-04: se llama desde el diálogo de confirmación.

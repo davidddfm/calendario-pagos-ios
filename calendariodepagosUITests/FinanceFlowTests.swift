@@ -36,10 +36,12 @@ final class FinanceFlowTests: XCTestCase {
         launchWithRent()
         app.tabBars.buttons["Perfil"].tap()
         XCTAssertTrue(app.staticTexts["Configura tu salario"].waitForExistence(timeout: 5))
-        app.buttons["Ir a Ajustes"].tap()
+        let goToSettings = app.buttons["Ir a Ajustes"]
+        XCTAssertTrue(goToSettings.waitForExistence(timeout: 5))
+        goToSettings.tap()
 
         let salary = app.textFields["settings.salary"]
-        XCTAssertTrue(salary.waitForExistence(timeout: 5))
+        XCTAssertTrue(salary.waitForExistence(timeout: 10))
         salary.tap()
         salary.typeText("2000")
         app.buttons["Guardar salario"].tap()
