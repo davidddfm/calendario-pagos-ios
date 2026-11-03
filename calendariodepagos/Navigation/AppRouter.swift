@@ -11,6 +11,8 @@ enum AppTab: Hashable {
 enum AppRoute: Hashable {
     /// QUI-01
     case fortnight(Fortnight)
+    /// CAL-03
+    case dayDetail(Date)
     /// HIS-01
     case history
     /// HIS-03

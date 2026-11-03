@@ -1437,7 +1437,7 @@ No hay proceso de cierre. Al detectarse un día nuevo (`significantTimeChangeNot
 
 ## 13. Matriz de trazabilidad
 
-Estado de implementación al 2026-11-02 (fin de la iteración 3): ✅ implementada y probada · 🟡 parcial (la regla de dominio está lista y probada; falta la pantalla o la integración indicada) · ⬜ pendiente.
+Estado de implementación al 2026-11-02 (fin de la iteración 4): ✅ implementada y probada · 🟡 parcial (la regla de dominio está lista y probada; falta la pantalla o la integración indicada) · ⬜ pendiente.
 
 | Regla | Componente principal | Caso de uso / regla de dominio | Prueba | Estado |
 | --- | --- | --- | --- | --- |
@@ -1451,7 +1451,7 @@ Estado de implementación al 2026-11-02 (fin de la iteración 3): ✅ implementa
 | PAG-06 | `HomeView` | `GetHomeSummaryUseCase` | Unit | ✅ |
 | PAG-07 | Todas las vistas con fechas, avisos, widget | `YearMonth.effectiveDay` | Unit: feb (28/29), abr (30), ene (31) | ✅ Aplicado en Inicio y avisos; cada vista nueva lo reutiliza |
 | PAG-08 | `EmptyStateView` | `HomeSummary.isEmpty` | Unit + UI | ✅ |
-| MAR-01 | `PaidCheckbox` en 3 vistas + `Toggle` en widget | `TogglePaymentPaidUseCase` | Unit + UI | 🟡 Casillas en Inicio y Quincena; faltan Detalle del día (iteración 4) y widget (iteración 6) |
+| MAR-01 | `PaidCheckbox` en 3 vistas + `Toggle` en widget | `TogglePaymentPaidUseCase` | Unit + UI | 🟡 Casillas en Inicio, Quincena y Detalle del día; falta el widget (iteración 6) |
 | MAR-02 | Vistas (casillas condicionadas) | `period == mes actual` | Unit en ViewModels | ✅ Inicio y Quincena son siempre del mes actual; el Historial corrige meses pasados (HIS-04) |
 | MAR-03 | — | ADR-05 (estado derivado) | Unit: cambiar `FixedClock` de mes | ✅ |
 | MAR-04 | — | `PaymentRecord(snapshotOf:)` | Unit: editar tras marcar no cambia el registro | ✅ |
@@ -1466,13 +1466,13 @@ Estado de implementación al 2026-11-02 (fin de la iteración 3): ✅ implementa
 | DAS-04 | `SalaryRequiredCard` | `availability == nil` | Unit + UI | ✅ `SalaryRequiredCard` con "Ir a Ajustes"; UI: `FinanceFlowTests.testSalaryFromDashboard` |
 | DAS-05 | Campo de salario | `SalaryValidator` | Unit: 9,999,999 válido; 9,999,999.01 inválido | ✅ Unit: `SettingsViewModelTests.salaryLimit` y `SettingsUseCaseTests` |
 | DAS-06 | Botón "Ver historial" | `AppRoute.history` | UI | ✅ UI: `testSalaryFromDashboard` |
-| CAL-01 | `CalendarView` | `GetCalendarMonthUseCase` | Unit | ⬜ |
-| CAL-02 | Botones de mes | `YearMonth.adding(months:)` | Unit: dic → ene, ene → dic | 🟡 `YearMonth.adding(months:)` probado; falta vista |
-| CAL-03 | `DayDetailView` | `GetDayDetailUseCase` | Unit | ⬜ |
-| CAL-04 | `DayDetailView` | `DayDetail.isEditable`, progreso | Unit | ⬜ |
-| CAL-05 | `DayDetailView` | `isEditable == false` | Unit | ⬜ |
-| CAL-06 | Fila del día | `AppSheet.editPayment` | UI | ⬜ |
-| CAL-07 | `Menu` Herramientas | — | UI | 🟡 Menú Herramientas en la barra del Calendario (UI: `testToolsFromCalendar`); falta la vista mensual (iteración 4) |
+| CAL-01 | `CalendarView` | `GetCalendarMonthUseCase` | Unit | ✅ Cuadrícula con fondo y punto (verde si todo está pagado); Unit: `CalendarUseCaseTests`; UI: `CalendarFlowTests` |
+| CAL-02 | Botones de mes | `YearMonth.adding(months:)` | Unit: dic → ene, ene → dic | ✅ Anterior/siguiente sin límite e "Ir a hoy"; Unit: `CalendarViewModelTests.navigation` (dic → ene) |
+| CAL-03 | `DayDetailView` | `GetDayDetailUseCase` | Unit | ✅ Fecha completa, total y pagos con categoría y monto |
+| CAL-04 | `DayDetailView` | `DayDetail.isEditable`, progreso | Unit | ✅ "1 de 1 pagados" con barra y casillas; Unit + UI |
+| CAL-05 | `DayDetailView` | `isEditable == false` | Unit | ✅ Sin casillas y con aviso hacia el Historial; Unit + UI |
+| CAL-06 | Fila del día | `AppSheet.editPayment` | UI | ✅ Tocar un pago vigente abre `.editPayment`; UI |
+| CAL-07 | `Menu` Herramientas | — | UI | ✅ Menú Herramientas en la barra del Calendario; UI: `testToolsFromCalendar` |
 | QUI-01 | `FortnightDetailView` | `GetFortnightDetailUseCase` | Unit | ✅ |
 | QUI-02 | Tarjeta de saldo | `salary.percent(50) − total` | Unit | ✅ |
 | QUI-03 | `PaidCheckbox` | MAR-02 | Unit | ✅ |
@@ -1890,13 +1890,13 @@ La especificación no fija estos detalles; se adopta el criterio indicado hasta 
 | 0. Fundaciones | Ajustes de proyecto, Git, CI con controles de cumplimiento, paquete `CalendarioKit`, `Domain` (valores y reglas) con pruebas, *spike* de avisos desde el widget, `PrivacyInfo.xcprivacy` desde el primer día | PAG-03, PAG-07, CAT | ✅ Completada, salvo el *spike* del widget (R-02), que pasa a la iteración 6 porque necesita el target del widget |
 | 1. Pagos | Persistencia, onboarding de moneda, Inicio, formulario, búsqueda, borrado | NAV, PAG, MND-01, MND-02 | ✅ Completada (NAV-02 y PAG-06 se cerraron en la iteración 2) |
 | 2. Estado mensual | Marcar, quincenas, historial | MAR, QUI, HIS | ✅ Completada, más NAV-02 y PAG-06. Las casillas del Detalle del día y del widget llegan en las iteraciones 4 y 6 |
-| 3. Finanzas | Ajustes de salario, Dashboard, herramientas, exportación | CFG, DAS, HER, MND-03, MND-04 | ✅ Completada. Falta la prueba manual de la hoja de compartir (HER-09); el menú Herramientas ya vive en la barra del Calendario, cuya vista mensual llega en la iteración 4 |
-| 4. Calendario | Vista mensual, detalle del día | CAL | ⬜ Pendiente |
+| 3. Finanzas | Ajustes de salario, Dashboard, herramientas, exportación | CFG, DAS, HER, MND-03, MND-04 | ✅ Completada. Falta la prueba manual de la hoja de compartir (HER-09) |
+| 4. Calendario | Vista mensual, detalle del día | CAL | ✅ Completada, más MAR-01 en el Detalle del día |
 | 5. Sistema | Recordatorios, bloqueo, apariencia | NOT, SEG, APA | ⬜ Pendiente (`ReminderPlanner` ya listo) |
 | 6. Widget | Familias, línea de tiempo, intención interactiva | WID | ⬜ Pendiente |
 | 7. Publicación | Accesibilidad, rendimiento, política de privacidad y soporte publicados, ficha, notas para App Review y lista de verificación de [§17.3](#173-lista-de-verificación-previa-al-envío) en TestFlight | NEG, §14.6, §14.7, §17 | ⬜ Pendiente |
 
-Notas de implementación (iteraciones 0 a 3):
+Notas de implementación (iteraciones 0 a 4):
 
 - `Package.swift` incorpora cada módulo en la iteración que lo usa; con varios productos, el esquema de pruebas del paquete es `CalendarioKit-Package`. El target `TestSupport` (reloj fijo, repositorios en memoria, datos de ejemplo) solo lo usan las pruebas.
 - `MonthStatement.Item` añade `scheduledDay` (para calcular la quincena de un pago eliminado después de pagarlo) y `paymentExists` (Inicio oculta los pagos eliminados que solo siguen en el Historial).
@@ -1908,6 +1908,8 @@ Notas de implementación (iteraciones 0 a 3):
 - Se agregó `GetSettingsUseCase` para que `SettingsViewModel` lea los valores actuales sin tocar el repositorio.
 - El Dashboard usa una `List` con secciones como tarjetas (no `ScrollView`), por la misma razón que las demás pantallas con lista.
 - La lectura de montos escritos por el usuario está en `AmountInput` (formulario de pago, salario y ¿Puedo costearlo?).
+- Calendario: el mes actual muestra solo pagos vigentes (como Inicio); los meses pasados incluyen los eliminados después de pagarlos (como el Historial) y los futuros proyectan los pagos activos hoy. `CalendarMonth` trae las iniciales de la semana ya rotadas según `calendar.firstWeekday`. Un pago eliminado no abre la edición desde el detalle del día.
+- En la `LazyVGrid` del Calendario, encabezados, celdas vacías y días van en un único `ForEach` con ids distintos: con varios `ForEach` cuyos ids se repetían (0…6 y 1…31), SwiftUI descartaba los días 1 a 6.
 - Antes de probar en un iPhone físico hay que registrar el App Group `group.com.davidddfm.calendariodepagos` y asignar el equipo de firma.
 
 ## 20. Referencias

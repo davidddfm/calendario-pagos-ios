@@ -27,20 +27,22 @@ struct MainTabView: View {
                 Label("Inicio", systemImage: "house")
             }
 
-            // La vista mensual llega en la iteración 4; las herramientas ya están en su barra (CAL-07).
             Tab(value: AppTab.calendar) {
                 NavigationStack(path: $router.calendarPath) {
-                    ContentUnavailableView("Calendario", systemImage: "calendar")
-                        .navigationTitle("Calendario")
-                        .toolbar {
-                            ToolbarItem(placement: .topBarLeading) {
-                                ToolsMenu(exportFile: container.makePaymentsCSVFile()) {
-                                    router.calendarPath.append(AppRoute($0))
-                                }
+                    CalendarView(
+                        viewModel: container.makeCalendarViewModel(),
+                        onOpenDay: { router.calendarPath.append(.dayDetail($0)) }
+                    )
+                    .toolbar {
+                        // CAL-07
+                        ToolbarItem(placement: .topBarLeading) {
+                            ToolsMenu(exportFile: container.makePaymentsCSVFile()) {
+                                router.calendarPath.append(AppRoute($0))
                             }
-                            addPaymentButton
                         }
-                        .navigationDestination(for: AppRoute.self) { destination($0, path: $router.calendarPath) }
+                        addPaymentButton
+                    }
+                    .navigationDestination(for: AppRoute.self) { destination($0, path: $router.calendarPath) }
                 }
             } label: {
                 Label("Calendario", systemImage: "calendar")
@@ -75,6 +77,10 @@ struct MainTabView: View {
                 viewModel: container.makeFortnightViewModel(fortnight: fortnight),
                 onSelectPayment: { router.sheet = .editPayment($0) },
                 onConfigureSalary: { path.wrappedValue.append(.settings) })
+        case .dayDetail(let date):
+            DayDetailView(
+                viewModel: container.makeDayDetailViewModel(date: date),
+                onSelectPayment: { router.sheet = .editPayment($0) })
         case .history:
             HistoryView(
                 viewModel: container.makeHistoryViewModel(),

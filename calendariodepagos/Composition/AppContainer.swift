@@ -103,6 +103,18 @@ extension AppContainer: ScreenFactory {
         )
     }
 
+    func makeCalendarViewModel() -> CalendarViewModel {
+        CalendarViewModel(getMonth: GetCalendarMonthUseCase(payments: payments, records: records, clock: clock))
+    }
+
+    func makeDayDetailViewModel(date: Date) -> DayDetailViewModel {
+        DayDetailViewModel(
+            date: date,
+            getDetail: GetDayDetailUseCase(payments: payments, records: records, clock: clock),
+            togglePaid: togglePaid
+        )
+    }
+
     func makeDashboardViewModel() -> DashboardViewModel {
         DashboardViewModel(getDashboard: GetDashboardUseCase(payments: payments, settings: settings, clock: clock))
     }

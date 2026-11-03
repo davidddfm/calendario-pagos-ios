@@ -9,6 +9,8 @@ public enum DomainError: Error, Equatable, Sendable {
     case paymentNotInPeriod
     /// PAG-01: los casos de uso vuelven a validar antes de persistir (defensa en profundidad, §5.4).
     case invalidPayment([PaymentValidationError])
+    /// El calendario no pudo construir una fecha del mes (no ocurre con el calendario gregoriano).
+    case invalidDate
 }
 
 extension DomainError: LocalizedError {
@@ -19,6 +21,7 @@ extension DomainError: LocalizedError {
         case .paymentNotInPeriod: String(localized: "El pago no existía en ese mes.", bundle: .module)
         case .invalidPayment(let errors):
             errors.first?.errorDescription ?? String(localized: "Revisa los datos del pago.", bundle: .module)
+        case .invalidDate: String(localized: "No se pudo mostrar esa fecha.", bundle: .module)
         }
     }
 }

@@ -99,7 +99,7 @@ struct ErrorMessageTests {
             PaymentValidationError.nameRequired, PaymentValidationError.nameTooLong,
             PaymentValidationError.amountRequired, PaymentValidationError.amountOutOfRange,
             PaymentValidationError.dayOutOfRange, DomainError.futurePeriod, DomainError.paymentNotFound,
-            DomainError.paymentNotInPeriod, SalaryValidationError.outOfRange,
+            DomainError.paymentNotInPeriod, DomainError.invalidDate, SalaryValidationError.outOfRange,
         ]
         for error in errors {
             #expect(error.errorDescription?.isEmpty == false)

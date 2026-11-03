@@ -1,4 +1,5 @@
 import Domain
+import Foundation
 
 /// Construye los ViewModels de cada pantalla. La implementa la raíz de composición de la app (§9.2).
 public protocol ScreenFactory {
@@ -8,6 +9,8 @@ public protocol ScreenFactory {
     func makeFortnightViewModel(fortnight: Fortnight) -> FortnightViewModel
     func makeHistoryViewModel() -> HistoryViewModel
     func makeHistoryMonthViewModel(period: YearMonth) -> HistoryMonthViewModel
+    func makeCalendarViewModel() -> CalendarViewModel
+    func makeDayDetailViewModel(date: Date) -> DayDetailViewModel
     func makeDashboardViewModel() -> DashboardViewModel
     func makeSettingsViewModel() -> SettingsViewModel
     func makeAffordabilityViewModel() -> AffordabilityViewModel
