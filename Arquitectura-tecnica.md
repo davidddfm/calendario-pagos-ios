@@ -6,7 +6,7 @@
 | Versión | 1.1 (alineada con [investigacion.md](investigacion.md) y las App Review Guidelines del 16 de octubre de 2026) |
 | Fecha | 2026-11-01 |
 | Entorno de referencia | Xcode 26.5 · Swift 6.3 · SDK iOS 26 |
-| Estado | En implementación: iteraciones 0 a 2 completadas ([§19](#19-plan-de-implementación)) |
+| Estado | En implementación: iteraciones 0 a 6 completadas ([§19](#19-plan-de-implementación)) |
 
 Este documento traduce la especificación funcional a una arquitectura limpia, ejecutable y verificable. Define las capas, los módulos, el modelo de datos, los contratos entre componentes, los algoritmos de cada regla y los estándares con los que se escribe, prueba y entrega el código. Cada regla funcional (por ejemplo **PAG-07**) aparece en la [matriz de trazabilidad](#13-matriz-de-trazabilidad) con el componente que la resuelve y la prueba que la verifica.
 
@@ -127,7 +127,7 @@ flowchart TB
 | `DesignSystem` | Domain, SwiftUI, Charts | Persistence, SystemServices, SwiftData |
 | `Features` | Domain, DesignSystem, SwiftUI, Charts | Persistence, SystemServices, SwiftData (las implementaciones llegan inyectadas) |
 | App (target) | Todos | — |
-| Widget (target) | Domain, Persistence, DesignSystem, WidgetKit, AppIntents | Features |
+| Widget (target) | Domain, Persistence, SystemServices (reloj y avisos de la intención), WidgetKit, AppIntents | Features, DesignSystem (usa su propia `WidgetPalette`) |
 
 ## 4. Estructura de módulos y carpetas
 
@@ -145,7 +145,6 @@ calendariodepagos/
 │   ├── Composition/AppContainer.swift     # Construye y conecta dependencias
 │   ├── Composition/AppSideEffects.swift   # Implementa DataChangeObserving
 │   ├── Navigation/AppRouter.swift         # Pestañas, rutas, hojas
-│   ├── Navigation/DeepLink.swift          # calendariodepagos://…
 │   ├── Lifecycle/AppLifecycleCoordinator.swift
 │   ├── Lifecycle/NotificationDelegate.swift
 │   ├── Resources/Assets.xcassets
@@ -153,12 +152,17 @@ calendariodepagos/
 │   ├── Resources/PrivacyInfo.xcprivacy
 │   └── calendariodepagos.entitlements     # App Group
 ├── Shared/                                # Membresía: App + Widget
+│   ├── DeepLink.swift                     # calendariodepagos://…
 │   └── TogglePaymentPaidIntent.swift
 ├── TodayPaymentsWidget/                   # Target Widget Extension
 │   ├── TodayPaymentsWidgetBundle.swift
-│   ├── TodayPaymentsWidget.swift
+│   ├── TodayPaymentsWidget.swift          # Configuración y vista por familia
 │   ├── TodayPaymentsProvider.swift
-│   ├── Views/{Inline,Rectangular,Small,Medium,Large}View.swift
+│   ├── TodayEntry.swift
+│   ├── WidgetPalette.swift
+│   ├── Views/SummaryViews.swift           # Línea, rectángulo, pequeño y "sin acceso"
+│   ├── Views/ListView.swift               # Mediano y grande, con PaidToggleStyle
+│   ├── Resources/PrivacyInfo.xcprivacy
 │   └── TodayPaymentsWidget.entitlements   # Mismo App Group
 ├── Packages/CalendarioKit/
 │   ├── Package.swift
@@ -694,6 +698,10 @@ public protocol DeviceOwnerAuthenticating: Sendable {
     func authenticate(reason: String) async -> DeviceOwnerAuthResult
 }
 
+public protocol WidgetRefreshing: Sendable {
+    func reloadAll()
+}
+
 public protocol PaymentsExporting {
     /// Escribe el CSV y devuelve la URL temporal del archivo.
     func export(_ payments: [Payment], currency: Currency, date: Date) throws -> URL
@@ -1200,8 +1208,8 @@ struct TodayPaymentsWidget: Widget {
 | `.accessoryInline` (línea) | `InlineView` | "2 pagos pendientes hoy" / "Todo al día" |
 | `.accessoryRectangular` | `RectangularView` | Igual, con icono |
 | `.systemSmall` | `SmallView` | Número grande de pendientes, "1 de 3 pagados"; "¡Todo al día!" con palomita |
-| `.systemMedium` | `MediumView` | Fecha y hasta 3 pagos con `Toggle(isOn:intent:)` (WID-07) |
-| `.systemLarge` | `LargeView` | Igual que mediano, más barra de progreso y hasta 7 filas |
+| `.systemMedium` | `ListView(maxRows: 3)` | Fecha y hasta 3 pagos con `Toggle(isOn:intent:)` (WID-07) |
+| `.systemLarge` | `ListView(maxRows: 7)` | Igual que mediano, más barra de progreso y hasta 7 filas |
 
 ### 10.2 Línea de tiempo (WID-04)
 
@@ -1437,7 +1445,7 @@ No hay proceso de cierre. Al detectarse un día nuevo (`significantTimeChangeNot
 
 ## 13. Matriz de trazabilidad
 
-Estado de implementación al 2026-11-02 (fin de la iteración 5): ✅ implementada y probada · 🟡 parcial (la regla de dominio está lista y probada; falta la pantalla o la integración indicada) · ⬜ pendiente.
+Estado de implementación al 2026-11-02 (fin de la iteración 6): ✅ implementada y probada · 🟡 parcial (la regla de dominio está lista y probada; falta la pantalla o la integración indicada) · ⬜ pendiente.
 
 | Regla | Componente principal | Caso de uso / regla de dominio | Prueba | Estado |
 | --- | --- | --- | --- | --- |
@@ -1451,7 +1459,7 @@ Estado de implementación al 2026-11-02 (fin de la iteración 5): ✅ implementa
 | PAG-06 | `HomeView` | `GetHomeSummaryUseCase` | Unit | ✅ |
 | PAG-07 | Todas las vistas con fechas, avisos, widget | `YearMonth.effectiveDay` | Unit: feb (28/29), abr (30), ene (31) | ✅ Aplicado en Inicio y avisos; cada vista nueva lo reutiliza |
 | PAG-08 | `EmptyStateView` | `HomeSummary.isEmpty` | Unit + UI | ✅ |
-| MAR-01 | `PaidCheckbox` en 3 vistas + `Toggle` en widget | `TogglePaymentPaidUseCase` | Unit + UI | 🟡 Casillas en Inicio, Quincena y Detalle del día; falta el widget (iteración 6) |
+| MAR-01 | `PaidCheckbox` en 3 vistas + `Toggle` en widget | `TogglePaymentPaidUseCase` | Unit + UI | ✅ Casillas en Inicio, Quincena, Detalle del día y widget (probado en el simulador) |
 | MAR-02 | Vistas (casillas condicionadas) | `period == mes actual` | Unit en ViewModels | ✅ Inicio y Quincena son siempre del mes actual; el Historial corrige meses pasados (HIS-04) |
 | MAR-03 | — | ADR-05 (estado derivado) | Unit: cambiar `FixedClock` de mes | ✅ |
 | MAR-04 | — | `PaymentRecord(snapshotOf:)` | Unit: editar tras marcar no cambia el registro | ✅ |
@@ -1509,16 +1517,16 @@ Estado de implementación al 2026-11-02 (fin de la iteración 5): ✅ implementa
 | SEG-03 | `RootView` → `AppLockView` | `isLocked` | UI | ✅ `RootView` → `AppLockView` sin datos; los enlaces esperan en `pendingDeepLink`; UI |
 | SEG-04 | Alerta | `availability() == .passcodeNotSet` | Unit con autenticador simulado | ✅ Se desactiva solo y avisa; activarlo sin código muestra una alerta; Unit |
 | APA-01 | Colores semánticos | — | Previews claro/oscuro | 🟡 No se fuerza `preferredColorScheme` y solo se usan colores del sistema; falta la revisión visual en modo oscuro (el simulador no aplicó el cambio de apariencia) |
-| WID-01 | `TodayEntry` sin dinero | `GetTodayWidgetSnapshotUseCase` | Unit (tipo sin montos) + revisión | ⬜ |
-| WID-02 | `WidgetPalette` | — | Previews de widget claro/oscuro | ⬜ |
-| WID-03 | `AppSideEffects` | `WidgetCenterRefresher` | Unit con refresco simulado | ⬜ |
-| WID-04 | `TodayPaymentsProvider` | Entrada de medianoche, `.after(midnight)` | Unit del proveedor | ⬜ |
-| WID-05 | `widgetURL` | `DeepLink.today` | Manual | ⬜ |
-| WID-06 | Widget no consulta bloqueo | — | Revisión de código | ⬜ |
-| WID-07 | `Toggle(isOn:intent:)` | `TogglePaymentPaidIntent` | Manual + Unit del caso de uso | ⬜ |
+| WID-01 | `TodayEntry` sin dinero | `GetTodayWidgetSnapshotUseCase` | Unit (tipo sin montos) + revisión | ✅ `TodaySnapshot` solo tiene id, nombre y estado; prueba por reflexión de que no hay campos de dinero |
+| WID-02 | `WidgetPalette` | — | Previews de widget claro/oscuro | 🟡 `WidgetPalette` clara/oscura fija; palomita y tachado además del color; `#Preview` por familia. Falta revisar el modo oscuro y los modos `accented`/`vibrant` |
+| WID-03 | `AppSideEffects` | `WidgetCenterRefresher` | Unit con refresco simulado | ✅ `AppSideEffects` recarga ante `.payments`, `.paymentStatus` y `.salary`; Unit con `WidgetRefreshing` simulado y probado en el simulador |
+| WID-04 | `TodayPaymentsProvider` | Entrada de medianoche, `.after(midnight)` | Unit del proveedor | ✅ `WidgetTimelinePlanner` (entrada actual y de medianoche, `.after(midnight)`, reintento a 15 min); Unit con cambio de horario |
+| WID-05 | `widgetURL` | `DeepLink.today` | Manual | ✅ `widgetURL(DeepLink.today.url)`; tocar fuera de la casilla abre Inicio (probado en el simulador) |
+| WID-06 | Widget no consulta bloqueo | — | Revisión de código | ✅ Ni el widget ni la intención leen `AppLockSettings` |
+| WID-07 | `Toggle(isOn:intent:)` | `TogglePaymentPaidIntent` | Manual + Unit del caso de uso | 🟡 `TogglePaymentPaidIntent` marca y desmarca desde Mediano/Grande y la app lo refleja (probado en el simulador). Falta confirmar en dispositivo que la intención reprograma los avisos (R-02) |
 | NEG-01 | Sin SDKs de anuncios | ADR-10 | Revisión de dependencias | ✅ Cero dependencias externas |
 | NEG-02 | Sin StoreKit | — | Revisión | ✅ Sin StoreKit |
-| NEG-03 | `PrivacyInfo.xcprivacy` | — | Revisión + validación en App Store Connect | 🟡 `PrivacyInfo.xcprivacy` en la app; falta el del widget y la validación en App Store Connect |
+| NEG-03 | `PrivacyInfo.xcprivacy` | — | Revisión + validación en App Store Connect | 🟡 `PrivacyInfo.xcprivacy` en la app y en el widget; falta la validación en App Store Connect |
 | NEG-04 | Configuración de App Store Connect | — | Lista de verificación de publicación | ⬜ |
 
 ## 14. Estándares de desarrollo
@@ -1887,16 +1895,16 @@ La especificación no fija estos detalles; se adopta el criterio indicado hasta 
 
 | Iteración | Entregable | Reglas | Estado |
 | --- | --- | --- | --- |
-| 0. Fundaciones | Ajustes de proyecto, Git, CI con controles de cumplimiento, paquete `CalendarioKit`, `Domain` (valores y reglas) con pruebas, *spike* de avisos desde el widget, `PrivacyInfo.xcprivacy` desde el primer día | PAG-03, PAG-07, CAT | ✅ Completada, salvo el *spike* del widget (R-02), que pasa a la iteración 6 porque necesita el target del widget |
+| 0. Fundaciones | Ajustes de proyecto, Git, CI con controles de cumplimiento, paquete `CalendarioKit`, `Domain` (valores y reglas) con pruebas, *spike* de avisos desde el widget, `PrivacyInfo.xcprivacy` desde el primer día | PAG-03, PAG-07, CAT | ✅ Completada. El *spike* del widget (R-02) se implementó en la iteración 6; falta confirmarlo en un dispositivo |
 | 1. Pagos | Persistencia, onboarding de moneda, Inicio, formulario, búsqueda, borrado | NAV, PAG, MND-01, MND-02 | ✅ Completada (NAV-02 y PAG-06 se cerraron en la iteración 2) |
 | 2. Estado mensual | Marcar, quincenas, historial | MAR, QUI, HIS | ✅ Completada, más NAV-02 y PAG-06. Las casillas del Detalle del día y del widget llegan en las iteraciones 4 y 6 |
 | 3. Finanzas | Ajustes de salario, Dashboard, herramientas, exportación | CFG, DAS, HER, MND-03, MND-04 | ✅ Completada. Falta la prueba manual de la hoja de compartir (HER-09) |
 | 4. Calendario | Vista mensual, detalle del día | CAL | ✅ Completada, más MAR-01 en el Detalle del día |
 | 5. Sistema | Recordatorios, bloqueo, apariencia | NOT, SEG, APA | ✅ Completada. Pendientes manuales: avisos tras reiniciar (NOT-04), tocar un aviso real (NOT-09) y revisión en modo oscuro (APA-01) |
-| 6. Widget | Familias, línea de tiempo, intención interactiva | WID | ⬜ Pendiente |
+| 6. Widget | Familias, línea de tiempo, intención interactiva | WID | ✅ Completada. Pendientes manuales: pantalla bloqueada, modo oscuro y modos `accented`/`vibrant` (WID-02), y avisos reprogramados desde la intención en un dispositivo (R-02) |
 | 7. Publicación | Accesibilidad, rendimiento, política de privacidad y soporte publicados, ficha, notas para App Review y lista de verificación de [§17.3](#173-lista-de-verificación-previa-al-envío) en TestFlight | NEG, §14.6, §14.7, §17 | ⬜ Pendiente |
 
-Notas de implementación (iteraciones 0 a 5):
+Notas de implementación (iteraciones 0 a 6):
 
 - `Package.swift` incorpora cada módulo en la iteración que lo usa; con varios productos, el esquema de pruebas del paquete es `CalendarioKit-Package`. El target `TestSupport` (reloj fijo, repositorios en memoria, datos de ejemplo) solo lo usan las pruebas.
 - `MonthStatement.Item` añade `scheduledDay` (para calcular la quincena de un pago eliminado después de pagarlo) y `paymentExists` (Inicio oculta los pagos eliminados que solo siguen en el Historial).
@@ -1916,7 +1924,12 @@ Notas de implementación (iteraciones 0 a 5):
 - `Info.plist`: las claves de matriz (`CFBundleURLTypes`, `BGTaskSchedulerPermittedIdentifiers`, `UIBackgroundModes`) están en `Config/calendariodepagos-Info.plist`, fuera de la carpeta sincronizada del target; `NSFaceIDUsageDescription` va como `INFOPLIST_KEY_`.
 - Con `-ui-testing` (solo Debug) el permiso de avisos está concedido y la autenticación tiene éxito tras 2 s, para probar el bloqueo sin diálogos del sistema.
 - Para llevar "Para hoy" a la vista (NOT-09) se recrea la `List` de Inicio con `.id(...)`: envolverla en `ScrollViewReader` rompía su diff al borrar filas.
-- Antes de probar en un iPhone físico hay que registrar el App Group `group.com.davidddfm.calendariodepagos` y asignar el equipo de firma.
+- Antes de probar en un iPhone físico hay que registrar el App Group `group.com.davidddfm.calendariodepagos` y asignar el equipo de firma (también para `com.davidddfm.calendariodepagos.TodayPaymentsWidget`).
+- Widget: `DeepLink.swift` pasó a `Shared/` junto con `TogglePaymentPaidIntent`; `Shared` es una carpeta sincronizada con membresía en App y Widget. El `Info.plist` del widget (`NSExtension`) está en `Config/TodayPaymentsWidget-Info.plist`.
+- El widget depende de `SystemServices` (no de `DesignSystem`): la intención usa `SystemClock` y `UserNotificationReminderScheduler`, y la paleta es propia (`WidgetPalette`).
+- El cálculo de la línea de tiempo está en `Domain` (`WidgetTimelinePlanner`) para probarlo sin WidgetKit; `TodayPaymentsProvider` y `TodayEntry` son `nonisolated` porque `TimelineProvider` no se ejecuta en el `MainActor`. `GetTodayWidgetSnapshotUseCase` recibe `Calendar` (no `DateProviding`): la fecha llega como parámetro.
+- `AppSideEffects` recibe un `WidgetRefreshing`; con `-ui-testing` no recarga el widget real (el almacén de prueba vive en memoria). Se añadió el puerto `WidgetRefreshing` a [§6.1](#61-puertos-protocolos-del-dominio).
+- La intención reprograma los avisos tras marcar (R-02); si falla, solo se registra y la app reconcilia al volver a `.active`. Sin acceso al almacén, el widget muestra "Abre la app para ver tus pagos" y reintenta a los 15 minutos; la galería usa datos de ejemplo sin montos.
 
 ## 20. Referencias
 

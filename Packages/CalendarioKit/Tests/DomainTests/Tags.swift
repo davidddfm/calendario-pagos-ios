@@ -7,4 +7,5 @@ extension Tag {
     @Tag static var tools: Self
     @Tag static var reminders: Self
     @Tag static var settings: Self
+    @Tag static var widget: Self
 }

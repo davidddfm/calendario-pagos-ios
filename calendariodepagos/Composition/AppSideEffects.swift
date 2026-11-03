@@ -2,15 +2,17 @@ import Domain
 import Features
 import os
 
-/// Centraliza los efectos de cualquier mutación (§9.4). Los widgets se agregan en la iteración 6.
+/// Centraliza los efectos de cualquier mutación (§9.4).
 final class AppSideEffects: DataChangeObserving {
     private let tracker: DataChangeTracker
+    private let widgets: any WidgetRefreshing
     private var reconcile: (@MainActor () async throws -> Void)?
     /// Las reconciliaciones se encadenan: una ráfaga de cambios nunca deja un plan viejo al final.
     private var lastReconciliation: Task<Void, Never>?
 
-    init(tracker: DataChangeTracker) {
+    init(tracker: DataChangeTracker, widgets: any WidgetRefreshing) {
         self.tracker = tracker
+        self.widgets = widgets
     }
 
     /// Se conecta después de crear el caso de uso, que no depende de este observador.
@@ -20,6 +22,10 @@ final class AppSideEffects: DataChangeObserving {
 
     func dataDidChange(_ change: DataChange) {
         tracker.bump()
+        switch change {
+        case .payments, .paymentStatus, .salary: widgets.reloadAll()  // WID-03
+        case .currency, .reminderSettings: break
+        }
         switch change {
         case .payments, .paymentStatus, .reminderSettings: reconcileReminders()  // NOT-02, NOT-05, NOT-08
         case .salary, .currency: break

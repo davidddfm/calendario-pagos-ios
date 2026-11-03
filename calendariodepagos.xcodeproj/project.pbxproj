@@ -12,6 +12,10 @@
 		817C5CA23100000C006F1B8E /* SystemServices in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5CA23100000B006F1B8E /* SystemServices */; };
 		817C5CA33100000C006F1B8E /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5CA33100000B006F1B8E /* DesignSystem */; };
 		817C5CA43100000C006F1B8E /* Features in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5CA43100000B006F1B8E /* Features */; };
+		817C5CB00000000E006F1B8E /* TodayPaymentsWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 817C5CB000000001006F1B8E /* TodayPaymentsWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		817C5CB000000012006F1B8E /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5CB00000000F006F1B8E /* Domain */; };
+		817C5CB000000013006F1B8E /* Persistence in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5CB000000010006F1B8E /* Persistence */; };
+		817C5CB000000014006F1B8E /* SystemServices in Frameworks */ = {isa = PBXBuildFile; productRef = 817C5CB000000011006F1B8E /* SystemServices */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,7 +33,28 @@
 			remoteGlobalIDString = 817C5C4B30957894006F1B8E;
 			remoteInfo = calendariodepagos;
 		};
+		817C5CB00000000B006F1B8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 817C5C4430957894006F1B8E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 817C5CB000000004006F1B8E;
+			remoteInfo = TodayPaymentsWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		817C5CB00000000D006F1B8E /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				817C5CB00000000E006F1B8E /* TodayPaymentsWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		817C5C4C30957894006F1B8E /* calendariodepagos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = calendariodepagos.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -39,6 +64,7 @@
 		817C5C7B3097CFB1006F1B8E /* investigacion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = investigacion.md; sourceTree = "<group>"; };
 		817C5C9B3100000A006F1B8E /* Arquitectura-tecnica.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Arquitectura-tecnica.md"; sourceTree = "<group>"; };
 		817C5C9C3100000A006F1B8E /* CalendarioKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CalendarioKit; path = Packages/CalendarioKit; sourceTree = "<group>"; };
+		817C5CB000000001006F1B8E /* TodayPaymentsWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TodayPaymentsWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -55,6 +81,16 @@
 		817C5C6830957895006F1B8E /* calendariodepagosUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = calendariodepagosUITests;
+			sourceTree = "<group>";
+		};
+		817C5CB000000002006F1B8E /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		817C5CB000000003006F1B8E /* TodayPaymentsWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TodayPaymentsWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -86,6 +122,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		817C5CB000000006006F1B8E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				817C5CB000000012006F1B8E /* Domain in Frameworks */,
+				817C5CB000000013006F1B8E /* Persistence in Frameworks */,
+				817C5CB000000014006F1B8E /* SystemServices in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -97,6 +143,8 @@
 				817C5C7B3097CFB1006F1B8E /* investigacion.md */,
 				817C5C9C3100000A006F1B8E /* CalendarioKit */,
 				817C5C4E30957894006F1B8E /* calendariodepagos */,
+				817C5CB000000002006F1B8E /* Shared */,
+				817C5CB000000003006F1B8E /* TodayPaymentsWidget */,
 				817C5C5E30957895006F1B8E /* calendariodepagosTests */,
 				817C5C6830957895006F1B8E /* calendariodepagosUITests */,
 				817C5C4D30957894006F1B8E /* Products */,
@@ -109,6 +157,7 @@
 				817C5C4C30957894006F1B8E /* calendariodepagos.app */,
 				817C5C5B30957895006F1B8E /* calendariodepagosTests.xctest */,
 				817C5C6530957895006F1B8E /* calendariodepagosUITests.xctest */,
+				817C5CB000000001006F1B8E /* TodayPaymentsWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -123,13 +172,16 @@
 				817C5C4830957894006F1B8E /* Sources */,
 				817C5C4930957894006F1B8E /* Frameworks */,
 				817C5C4A30957894006F1B8E /* Resources */,
+				817C5CB00000000D006F1B8E /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				817C5CB00000000C006F1B8E /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				817C5C4E30957894006F1B8E /* calendariodepagos */,
+				817C5CB000000002006F1B8E /* Shared */,
 			);
 			name = calendariodepagos;
 			packageProductDependencies = (
@@ -189,6 +241,32 @@
 			productReference = 817C5C6530957895006F1B8E /* calendariodepagosUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		817C5CB000000004006F1B8E /* TodayPaymentsWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 817C5CB000000008006F1B8E /* Build configuration list for PBXNativeTarget "TodayPaymentsWidgetExtension" */;
+			buildPhases = (
+				817C5CB000000005006F1B8E /* Sources */,
+				817C5CB000000006006F1B8E /* Frameworks */,
+				817C5CB000000007006F1B8E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				817C5CB000000002006F1B8E /* Shared */,
+				817C5CB000000003006F1B8E /* TodayPaymentsWidget */,
+			);
+			name = TodayPaymentsWidgetExtension;
+			packageProductDependencies = (
+				817C5CB00000000F006F1B8E /* Domain */,
+				817C5CB000000010006F1B8E /* Persistence */,
+				817C5CB000000011006F1B8E /* SystemServices */,
+			);
+			productName = TodayPaymentsWidgetExtension;
+			productReference = 817C5CB000000001006F1B8E /* TodayPaymentsWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -209,6 +287,9 @@
 					817C5C6430957895006F1B8E = {
 						CreatedOnToolsVersion = 26.5;
 						TestTargetID = 817C5C4B30957894006F1B8E;
+					};
+					817C5CB000000004006F1B8E = {
+						CreatedOnToolsVersion = 26.5;
 					};
 				};
 			};
@@ -232,6 +313,7 @@
 				817C5C4B30957894006F1B8E /* calendariodepagos */,
 				817C5C5A30957895006F1B8E /* calendariodepagosTests */,
 				817C5C6430957895006F1B8E /* calendariodepagosUITests */,
+				817C5CB000000004006F1B8E /* TodayPaymentsWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -252,6 +334,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		817C5C6330957895006F1B8E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		817C5CB000000007006F1B8E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -282,6 +371,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		817C5CB000000005006F1B8E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -294,6 +390,11 @@
 			isa = PBXTargetDependency;
 			target = 817C5C4B30957894006F1B8E /* calendariodepagos */;
 			targetProxy = 817C5C6630957895006F1B8E /* PBXContainerItemProxy */;
+		};
+		817C5CB00000000C006F1B8E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 817C5CB000000004006F1B8E /* TodayPaymentsWidgetExtension */;
+			targetProxy = 817C5CB00000000B006F1B8E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -570,6 +671,62 @@
 			};
 			name = Release;
 		};
+		817C5CB000000009006F1B8E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TodayPaymentsWidget/TodayPaymentsWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/TodayPaymentsWidget-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Calendario de Pagos";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidddfm.calendariodepagos.TodayPaymentsWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		817C5CB00000000A006F1B8E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TodayPaymentsWidget/TodayPaymentsWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/TodayPaymentsWidget-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Calendario de Pagos";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidddfm.calendariodepagos.TodayPaymentsWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -609,6 +766,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		817C5CB000000008006F1B8E /* Build configuration list for PBXNativeTarget "TodayPaymentsWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				817C5CB000000009006F1B8E /* Debug */,
+				817C5CB00000000A006F1B8E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -638,6 +804,18 @@
 		817C5CA43100000B006F1B8E /* Features */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Features;
+		};
+		817C5CB00000000F006F1B8E /* Domain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Domain;
+		};
+		817C5CB000000010006F1B8E /* Persistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Persistence;
+		};
+		817C5CB000000011006F1B8E /* SystemServices */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SystemServices;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

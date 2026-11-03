@@ -33,7 +33,7 @@ final class AppContainer {
         settings = UserDefaultsSettingsRepository(
             defaults: defaults,
             hasStoredPayments: { (try? payments.payments(includingDeleted: true).isEmpty) == false })
-        sideEffects = AppSideEffects(tracker: tracker)
+        sideEffects = AppSideEffects(tracker: tracker, widgets: storage.widgetRefresher)
         exporter = CSVPaymentExporter(timeZone: clock.calendar.timeZone)
         // §8.4: los CSV de sesiones anteriores no se conservan.
         try? exporter.removeExports()
@@ -80,6 +80,15 @@ final class AppContainer {
             case .appGroup: UserNotificationReminderScheduler(route: DeepLink.today.rawValue)
             #if DEBUG
                 case .uiTesting: UITestingReminderScheduler()
+            #endif
+            }
+        }
+
+        var widgetRefresher: any WidgetRefreshing {
+            switch self {
+            case .appGroup: WidgetCenterRefresher()
+            #if DEBUG
+                case .uiTesting: UITestingWidgetRefresher()
             #endif
             }
         }

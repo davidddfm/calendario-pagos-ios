@@ -9,6 +9,11 @@
         func removeAll() async {}
     }
 
+    /// El almacén de prueba vive en memoria: el widget real no debe recargarse con él.
+    struct UITestingWidgetRefresher: WidgetRefreshing {
+        func reloadAll() {}
+    }
+
     /// El simulador no tiene código; esta versión permite probar el flujo de bloqueo (SEG-01 a SEG-03).
     struct UITestingAuthenticator: DeviceOwnerAuthenticating {
         func availability() -> DeviceOwnerAuthAvailability { .available }

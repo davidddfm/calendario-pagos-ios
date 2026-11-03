@@ -20,7 +20,7 @@ jobs:
           if [ "$major" -lt 26 ]; then echo "Se requiere Xcode 26+ (App Store Connect)"; exit 1; fi
 
       - name: Formato
-        run: swift format lint --strict --recursive Packages/CalendarioKit calendariodepagos calendariodepagosTests calendariodepagosUITests
+        run: swift format lint --strict --recursive Packages/CalendarioKit calendariodepagos Shared TodayPaymentsWidget calendariodepagosTests calendariodepagosUITests
 
       - name: Patrones prohibidos
         run: scripts/check-forbidden-patterns.sh
